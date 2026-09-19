@@ -8,6 +8,20 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="LetSeries 博客，记录 Minecraft 服务端开发、插件设计与开源实践。">
+  <meta name="keywords" content="LetSeries, 博客, Minecraft, 插件开发, Paper, Folia">
+  <meta name="author" content="LetSeries">
+  <link rel="canonical" href="https://letseries.github.io/blogs/index.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="LetSeries">
+  <meta property="og:title" content="博客 · LetSeries">
+  <meta property="og:description" content="记录我们如何构建 Minecraft 服务端工具，也分享兼容性、线程模型和开源协作中的具体答案。">
+  <meta property="og:url" content="https://letseries.github.io/blogs/index.html">
+  <meta property="og:image" content="https://letseries.github.io/images/LetSeries.png">
+  <meta property="og:locale" content="zh_CN">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="博客 · LetSeries">
+  <meta name="twitter:description" content="记录我们如何构建 Minecraft 服务端工具。">
+  <link rel="icon" type="image/png" href="../images/LetSeries.png">
   <title>博客 · LetSeries</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -38,6 +52,7 @@
       博客列表。
       <article class="post"><div class="post-number mono">xx / xxxx.xx.xx</div><div><h2>标题</h2><p>副标题</p><div class="post-meta mono">LETSeries · PRODUCT</div></div><div class="article-actions"><button class="article-link" data-article="博客id">阅读全文</button><a class="source-link" href="<源文件>">Markdown 源文</a></div></article>
       -->
+      <article class="post"><div class="post-number mono">02 / 2026.09.19</div><div><h2>HumanVerify：进服先验证</h2><p>多种验证模式、Folia 区域线程兼容，以及开放的验证 API。</p><div class="post-meta mono">LETSeries · PRODUCT</div></div><div class="article-actions"><button class="article-link" data-article="humanverify">阅读全文</button><a class="source-link" href="humanverify.md">Markdown 源文</a></div></article>
       <article class="post"><div class="post-number mono">01 / 2026.09.19</div><div><h2>LetSeries成立</h2><p>LetSeries发布的第一篇文章！</p><div class="post-meta mono">LETSeries · PRODUCT</div></div><div class="article-actions"><button class="article-link" data-article="letseries">阅读全文</button><a class="source-link" href="letseries.md">Markdown 源文</a></div></article>
     </div>
     <section class="reader" id="reader" aria-live="polite"><div class="reader-top"><span class="reader-kicker mono" id="reader-kicker">LETSeries / ARTICLE</span><button class="reader-close" id="reader-close" type="button">收起文章 ×</button></div><article class="markdown" id="markdown-content"></article></section>
@@ -51,6 +66,46 @@
   
   这是一个示例博客！</script>
   -->
+  <script type="text/plain" id="humanverify"># HumanVerify：进服先验证
+
+> LetSeries  |  2026/9/19
+
+## 为什么做人机验证
+
+机器人和批量小号是很多服务器的头疼问题。[HumanVerify](https://github.com/LetSeries/HumanVerify) 是面向高版本服务端的游戏内验证插件：玩家进服自动打开验证界面，在背包里点中唯一方块即通过，支持 Paper、Folia、Purpur。
+
+## 验证模式不止一种
+
+插件内置多种模式，可固定一种，也可以每轮随机：
+
+- 唯一颜色方块、唯一材质方块
+- 按编号顺序点击方块
+- 点击指定数量目标方块
+- 找出唯一不同的方块
+- 点击中心或角落方块
+
+背包大小支持 27 / 36 / 45 / 54 格，配合验证超时与错误次数限制，基本能挡住常见的自动脚本。
+
+## Folia 兼容与开放 API
+
+插件使用 Paper/Folia `EntityScheduler`，不依赖传统全局调度器，天然兼容 Folia 区域线程模型。同时通过 Bukkit `ServicesManager` 暴露 `HumanVerifyApi`，其他插件无需依赖实现包即可调用：
+
+- `requestVerification(player)`：幂等发起验证，已验证直接返回成功
+- `requestVerification(player, true)`：强制玩家再次验证
+- `markVerified(player)`：直接放行，供可信插件调用
+
+[LetMeAsk](https://github.com/LetSeries/LetMeAsk) 的防刷机制就是这么接的：答题过快或连对过多时自动触发验证。
+
+## 运行与构建
+
+需要 Java 21+ 与 Paper 1.21.x 服务端（`plugin.yml` 已声明 `folia-supported: true`）：
+
+```bash
+mvn package
+```
+
+产物 `target/HumanVerify-1.0.0.jar` 放进 `plugins/` 目录即可，命令 `/humanverify verify [玩家]`、`/humanverify reload`。</script>
+
   <script type="text/plain" id="letseries"># LetSeries成立了！
 > kevin-steve772  |  2026/9/19
 
@@ -73,6 +128,7 @@
     const articles = {
         // 在这里添加博客项目。
         // 格式：<博客id>: "<博客id>",
+        humanverify: "humanverify",
         letseries: "letseries"
 
     };

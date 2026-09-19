@@ -3,14 +3,43 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="description" content="LetSeries 为 Minecraft 服务端提供实用、易用、够稳的工具与插件。">
+	<meta name="description" content="LetSeries 是 CubeXMC 研究院旗下的 Minecraft 服务端开发组织，提供 LetMeDo、LetMeSee、LetMeAsk、Server-AI、HumanVerify 等实用开源插件与工具。">
+	<meta name="keywords" content="LetSeries, Minecraft, 插件, Paper, Folia, Purpur, Bukkit, Spigot, CubeXMC">
+	<meta name="author" content="LetSeries">
+	<meta name="theme-color" content="#f4f7f1" media="(prefers-color-scheme: light)">
+	<meta name="theme-color" content="#111813" media="(prefers-color-scheme: dark)">
+	<link rel="canonical" href="https://letseries.github.io/">
+	<meta property="og:type" content="website">
+	<meta property="og:site_name" content="LetSeries">
+	<meta property="og:title" content="LetSeries · Minecraft 服务端工具">
+	<meta property="og:description" content="让服务器好用一点。实用、易用、够稳的 Minecraft 服务端插件与工具。">
+	<meta property="og:url" content="https://letseries.github.io/">
+	<meta property="og:image" content="https://letseries.github.io/images/LetSeries.png">
+	<meta property="og:locale" content="zh_CN">
+	<meta name="twitter:card" content="summary">
+	<meta name="twitter:title" content="LetSeries · Minecraft 服务端工具">
+	<meta name="twitter:description" content="让服务器好用一点。实用、易用、够稳的 Minecraft 服务端插件与工具。">
+	<meta name="twitter:image" content="https://letseries.github.io/images/LetSeries.png">
+	<link rel="icon" type="image/png" href="images/LetSeries.png">
+	<link rel="apple-touch-icon" href="images/LetSeries.png">
 	<title>LetSeries · Minecraft 服务端工具</title>
+	<script type="application/ld+json">
+	{
+		"@context": "https://schema.org",
+		"@type": "Organization",
+		"name": "LetSeries",
+		"url": "https://letseries.github.io/",
+		"logo": "https://letseries.github.io/images/LetSeries.png",
+		"slogan": "让服务器好用一点。",
+		"parentOrganization": { "@type": "Organization", "name": "CubeXMC 研究院", "url": "https://cubexmc.org/" },
+		"sameAs": ["https://github.com/LetSeries", "https://cubexmc.org/"]
+	}
+	</script>
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@500;600;700;800&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
 	<style>
 		:root {
-			color-scheme: light dark;
 			--bg: #f4f7f1;
 			--surface: #ffffff;
 			--surface-soft: #eaf1e8;
@@ -25,7 +54,8 @@
 		}
 
 		@media (prefers-color-scheme: dark) {
-			:root {
+			html:not([data-theme]) {
+				color-scheme: dark;
 				--bg: #111813;
 				--surface: #18241b;
 				--surface-soft: #203126;
@@ -40,6 +70,23 @@
 			}
 		}
 
+		html[data-theme="dark"] {
+			color-scheme: dark;
+			--bg: #111813;
+			--surface: #18241b;
+			--surface-soft: #203126;
+			--text: #edf5eb;
+			--muted: #a6b7a9;
+			--line: #304436;
+			--green: #56ce83;
+			--green-deep: #b1f2c4;
+			--green-pale: #254b32;
+			--yellow: #f1c65a;
+			--shadow: 0 18px 50px rgba(0, 0, 0, .2);
+		}
+
+		html[data-theme="light"] { color-scheme: light; }
+
 		* { box-sizing: border-box; }
 		html { scroll-behavior: smooth; }
 		body {
@@ -50,8 +97,11 @@
 			line-height: 1.7;
 		}
 		a { color: inherit; text-decoration: none; }
+		:focus-visible { outline: 2px solid var(--green); outline-offset: 3px; border-radius: 4px; }
 		.wrap { width: min(1160px, calc(100% - 48px)); margin: 0 auto; }
 		.mono { font-family: "DM Mono", monospace; letter-spacing: .03em; }
+		.skip-link { position: absolute; left: -999px; top: 0; padding: 10px 16px; background: var(--green); color: #fff; border-radius: 0 0 8px 0; z-index: 50; }
+		.skip-link:focus { left: 0; }
 
 		header {
 			position: sticky; top: 0; z-index: 10;
@@ -59,13 +109,25 @@
 			background: color-mix(in srgb, var(--bg) 90%, transparent);
 			backdrop-filter: blur(14px);
 		}
-		.nav { height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+		.nav { height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 24px; position: relative; }
 		.brand { display: flex; align-items: center; gap: 11px; font-weight: 900; letter-spacing: -.04em; font-size: 19px; }
 		.brand-mark { width: 34px; height: 34px; display: grid; place-items: center; overflow: hidden; border-radius: 9px; background: var(--green); box-shadow: 0 7px 16px color-mix(in srgb, var(--green) 28%, transparent); }
 		.brand-mark img { width: 100%; height: 100%; object-fit: cover; }
-		.nav-links { display: flex; align-items: center; gap: 26px; color: var(--muted); font-size: 14px; }
+		.nav-links { display: flex; align-items: center; gap: 22px; color: var(--muted); font-size: 14px; }
 		.nav-links a:hover { color: var(--green); }
 		.nav-cta { padding: 8px 14px; border: 1px solid var(--line); border-radius: 7px; color: var(--text); }
+		.nav-tools { display: flex; align-items: center; gap: 10px; }
+		.theme-toggle {
+			display: inline-flex; align-items: center; justify-content: center;
+			width: 36px; height: 36px; padding: 0; cursor: pointer;
+			border: 1px solid var(--line); border-radius: 7px; background: var(--surface); color: var(--text); font-size: 16px;
+		}
+		.theme-toggle:hover { border-color: var(--green); color: var(--green); }
+		.nav-toggle {
+			display: none; align-items: center; justify-content: center;
+			width: 36px; height: 36px; padding: 0; cursor: pointer;
+			border: 1px solid var(--line); border-radius: 7px; background: var(--surface); color: var(--text); font-size: 18px;
+		}
 
 		.hero { min-height: 650px; display: grid; grid-template-columns: 1.08fr .92fr; align-items: center; gap: 60px; padding: 88px 0 94px; position: relative; overflow: hidden; }
 		.hero::before { content: ""; position: absolute; width: 430px; height: 430px; right: -130px; top: 50px; border-radius: 50%; background: var(--green-pale); opacity: .45; z-index: -1; }
@@ -74,7 +136,9 @@
 		h1 { max-width: 700px; margin: 18px 0 23px; font-size: clamp(48px, 7vw, 86px); line-height: 1.07; letter-spacing: -.07em; font-weight: 900; }
 		h1 span { color: var(--green); }
 		.hero-copy { max-width: 570px; color: var(--muted); font-size: 17px; }
-		.hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 31px; }
+		.hero-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
+		.chip { display: inline-flex; align-items: center; padding: 4px 10px; border: 1px solid var(--line); border-radius: 20px; background: var(--surface); color: var(--muted); font-size: 11px; font-family: "DM Mono", monospace; }
+		.hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
 		.button { display: inline-flex; align-items: center; gap: 9px; padding: 12px 17px; border-radius: 7px; font-size: 14px; font-weight: 700; transition: transform .2s ease, box-shadow .2s ease; }
 		.button:hover { transform: translateY(-2px); }
 		.button-primary { color: #fff; background: var(--green); box-shadow: 0 10px 22px color-mix(in srgb, var(--green) 24%, transparent); }
@@ -94,13 +158,26 @@
 		h2 { margin: 8px 0 0; font-size: clamp(30px, 4vw, 48px); line-height: 1.15; letter-spacing: -.06em; }
 		.section-note { max-width: 360px; color: var(--muted); font-size: 14px; }
 		.project-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
-		.project { min-height: 285px; padding: 23px; display: flex; flex-direction: column; border: 1px solid var(--line); border-radius: 9px; background: var(--surface); transition: transform .2s ease, border-color .2s ease; }
+		.project { min-height: 320px; padding: 23px; display: flex; flex-direction: column; border: 1px solid var(--line); border-radius: 9px; background: var(--surface); transition: transform .2s ease, border-color .2s ease; }
 		.project:hover { transform: translateY(-5px); border-color: var(--green); }
-		.project-icon { width: 38px; height: 38px; display: grid; place-items: center; margin-bottom: 30px; border-radius: 7px; color: var(--green-deep); background: var(--green-pale); font-family: "DM Mono", monospace; font-weight: 500; }
+		.project-icon { width: 38px; height: 38px; display: grid; place-items: center; margin-bottom: 24px; border-radius: 7px; color: var(--green-deep); background: var(--green-pale); font-family: "DM Mono", monospace; font-weight: 500; }
 		.project h3 { margin: 0 0 8px; font-size: 21px; letter-spacing: -.04em; }
 		.project p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.75; }
-		.project-foot { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 20px; color: var(--muted); font-size: 11px; }
-		.project-foot a { color: var(--green); font-weight: 700; }
+		.project-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+		.tag { display: inline-flex; padding: 3px 8px; border-radius: 4px; background: var(--surface-soft); color: var(--muted); font-size: 10px; font-family: "DM Mono", monospace; }
+		.tag-push { color: var(--green); }
+		.project-foot { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-top: auto; padding-top: 20px; color: var(--muted); font-size: 11px; }
+		.project-links { display: flex; gap: 12px; }
+		.project-links a { color: var(--green); font-weight: 700; }
+		.project-links a:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+		.table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 9px; background: var(--surface); }
+		table { width: 100%; border-collapse: collapse; font-size: 13px; }
+		th, td { padding: 13px 16px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+		th { color: var(--muted); font-weight: 700; font-size: 12px; white-space: nowrap; }
+		tr:last-child th, tr:last-child td { border-bottom: 0; }
+		td a { color: var(--green); font-weight: 700; }
+		td code { padding: 2px 6px; border-radius: 4px; background: var(--surface-soft); font-family: "DM Mono", monospace; font-size: .9em; }
 
 		.principles { display: grid; grid-template-columns: .78fr 1.22fr; gap: 80px; align-items: start; }
 		.principles-copy p { max-width: 360px; color: var(--muted); }
@@ -120,43 +197,87 @@
 		.person-avatar { width: 54px; height: 54px; display: grid; place-items: center; overflow: hidden; margin-bottom: auto; border-radius: 50%; color: var(--green-deep); background: var(--green-pale); font-weight: 900; }
 		.person-avatar img { width: 100%; height: 100%; object-fit: cover; }
 		.person strong { font-size: 14px; } .person small { color: var(--muted); font-size: 11px; }
+		.person-link { margin-top: 4px; font-size: 11px; }
+		.person-link a { color: var(--green); }
+
+		.contact-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+		.contact-card { padding: 24px; border: 1px solid var(--line); border-radius: 9px; background: var(--surface); transition: transform .2s ease, border-color .2s ease; }
+		.contact-card:hover { transform: translateY(-4px); border-color: var(--green); }
+		.contact-card h3 { margin: 0 0 6px; font-size: 17px; }
+		.contact-card p { margin: 0 0 14px; color: var(--muted); font-size: 13px; }
+		.contact-card a.card-link { color: var(--green); font-weight: 700; font-size: 13px; }
+
 		footer { padding: 27px 0; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; }
 		.footer-row { display: flex; justify-content: space-between; gap: 20px; }
-		.footer-links { display: flex; gap: 20px; } .footer-links a:hover { color: var(--green); }
+		.footer-links { display: flex; flex-wrap: wrap; gap: 20px; } .footer-links a:hover { color: var(--green); }
+
+		.to-top {
+			position: fixed; right: 22px; bottom: 22px; z-index: 20;
+			display: none; align-items: center; justify-content: center;
+			width: 42px; height: 42px; cursor: pointer;
+			border: 1px solid var(--line); border-radius: 50%;
+			background: var(--surface); color: var(--green); font-size: 18px; box-shadow: var(--shadow);
+		}
+		.to-top.is-visible { display: inline-flex; }
+		.to-top:hover { border-color: var(--green); }
+
 		@media (max-width: 800px) {
 			.wrap { width: min(100% - 32px, 600px); }
-			.nav { height: 68px; } .nav-links { gap: 13px; } .nav-links a:not(.nav-cta):not(.nav-blog) { display: none; }
+			.nav { height: 68px; }
+			.nav-toggle { display: inline-flex; }
+			.nav-links {
+				display: none; position: absolute; top: 68px; right: 0; left: 0;
+				flex-direction: column; align-items: stretch; gap: 0;
+				padding: 10px; border: 1px solid var(--line); border-radius: 9px;
+				background: var(--surface); box-shadow: var(--shadow);
+			}
+			.nav-links.open { display: flex; }
+			.nav-links a { padding: 11px 12px; border-radius: 6px; }
+			.nav-links a:hover { background: var(--surface-soft); }
 			.hero { min-height: auto; grid-template-columns: 1fr; gap: 18px; padding: 70px 0 75px; } .hero-art { min-height: 290px; }
 			h1 { font-size: clamp(46px, 14vw, 72px); }
 			section { padding: 72px 0; } .section-head { display: block; } .section-note { margin-top: 15px; }
-			.project-grid { grid-template-columns: 1fr; } .project { min-height: 240px; }
+			.project-grid { grid-template-columns: 1fr; } .project { min-height: 0; }
 			.principles, .team-band { grid-template-columns: 1fr; gap: 35px; } .people { grid-template-columns: repeat(3, 1fr); }
+			.contact-grid { grid-template-columns: 1fr; }
 			.person { min-height: 150px; padding: 13px; } .footer-row { display: block; } .footer-links { margin-top: 12px; }
 		}
 		@media (prefers-reduced-motion: no-preference) {
 			.hero > * { animation: rise .7s ease both; } .hero-art { animation-delay: .12s; }
 			@keyframes rise { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 		}
+		@media print {
+			header, .hero-art, .hero-actions, .to-top, .nav-tools, footer .footer-links { display: none; }
+			section { padding: 30px 0; } .project-grid { grid-template-columns: 1fr; }
+		}
 	</style>
 </head>
 <body>
+	<a class="skip-link" href="#main">跳到主要内容</a>
 	<header>
 		<div class="wrap nav">
-			<a class="brand" href="#top"><span class="brand-mark"><img src="images/LetSeries.png" alt=""></span><span>LetSeries</span></a>
-			<nav class="nav-links" aria-label="主导航">
-				<a href="#projects">项目</a><a class="nav-blog" href="blogs/index.html">博客</a><a href="#about">关于我们</a><a href="#team">团队</a>
+			<a class="brand" href="#top"><span class="brand-mark"><img src="images/LetSeries.png" alt="LetSeries"></span><span>LetSeries</span></a>
+			<nav class="nav-links" id="nav-links" aria-label="主导航">
+				<a href="#projects">项目</a><a href="#quickstart">快速上手</a><a href="blogs/index.html">博客</a><a href="#about">关于我们</a><a href="#team">团队</a><a href="#contact">联系</a>
 				<a class="nav-cta" href="https://github.com/LetSeries" target="_blank" rel="noreferrer">GitHub</a>
 			</nav>
+			<div class="nav-tools">
+				<button class="theme-toggle" id="theme-toggle" type="button" aria-label="切换深色 / 浅色主题" aria-pressed="false">◐</button>
+				<button class="nav-toggle" id="nav-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="nav-links">☰</button>
+			</div>
 		</div>
 	</header>
 
-	<main id="top">
-		<div class="wrap hero">
+	<main id="main">
+		<div class="wrap hero" id="top">
 			<div>
 				<div class="eyebrow mono">CUBEXMC RESEARCH · 2026</div>
 				<h1>让服务器<br><span>好用一点。</span></h1>
 				<p class="hero-copy">LetSeries 是 CubeXMC 研究院旗下的开发组织，专注于为 Minecraft 服务端打磨实用、易用、够稳的插件与工具。</p>
-				<div class="hero-actions"><a class="button button-primary" href="#projects">探索项目</a><a class="button button-quiet" href="https://github.com/LetSeries" target="_blank" rel="noreferrer">GitHub</a></div>
+				<div class="hero-meta mono" aria-label="技术栈">
+					<span class="chip">JAVA 17+</span><span class="chip">GRADLE · MAVEN</span><span class="chip">PAPER / FOLIA / PURPUR</span><span class="chip">OPEN SOURCE</span>
+				</div>
+				<div class="hero-actions"><a class="button button-primary" href="#projects">探索项目</a><a class="button button-quiet" href="#quickstart">快速上手</a></div>
 			</div>
 			<div class="hero-art" aria-label="LetSeries 技术生态示意图">
 				<div class="orbit"><span class="orbit-label label-a mono">PAPER / FOLIA</span><span class="orbit-label label-b mono">JAVA 21+</span><span class="orbit-label label-c mono">OPEN SOURCE</span><div class="core"><img src="images/LetSeries.png" alt="LetSeries Logo"></div></div>
@@ -166,21 +287,96 @@
 		<section id="projects"><div class="wrap">
 			<div class="section-head"><div><div class="kicker mono">01 / PROJECTS</div><h2>正在构建的工具</h2></div><p class="section-note">从服务器运维到玩家体验，覆盖 Bukkit、Spigot、Paper、Folia、Purpur 与代理端。</p></div>
 			<div class="project-grid">
-				<article class="project"><div class="project-icon">→_</div><h3>LetMeDo</h3><p>多功能服务器插件。模块化设计，一个 jar 兼容 1.8.8+ 到最新版本。</p><div class="project-foot"><span class="mono">JAVA · MIT</span><a href="https://github.com/LetSeries/LetMeDo" target="_blank" rel="noreferrer">查看仓库 ↗</a></div></article>
-				<article class="project"><div class="project-icon">□</div><h3>LetMeSee</h3><p>轻量只读容器查看工具，支持 Folia 与 Paper，让管理操作更直接。</p><div class="project-foot"><span class="mono">PAPER · FOLIA</span><a href="https://github.com/LetSeries/LetMeSee" target="_blank" rel="noreferrer">查看仓库 ↗</a></div></article>
-				<article class="project"><div class="project-icon">?</div><h3>LetMeAsk</h3><p>服务器抢答活动插件。答题、经济奖励与人机验证，组成完整活动体验。</p><div class="project-foot"><span class="mono">PAPER · 1.20.4+</span><a href="https://github.com/LetSeries/LetMeAsk" target="_blank" rel="noreferrer">查看仓库 ↗</a></div></article>
-				<article class="project"><div class="project-icon">AI</div><h3>Server-AI</h3><p>把 AI 带进 Minecraft。兼容 OpenAI 格式 API，并可通过自然语言控制 NPC。</p><div class="project-foot"><span class="mono">PAPER · FOLIA</span><a href="https://github.com/LetSeries/Server-AI" target="_blank" rel="noreferrer">查看仓库 ↗</a></div></article>
-				<article class="project"><div class="project-icon">✓</div><h3>HumanVerify</h3><p>游戏内人机验证插件，提供多种验证模式，并通过 API 服务其他插件。</p><div class="project-foot"><span class="mono">JAVA 21+ · MIT</span><a href="https://github.com/LetSeries/HumanVerify" target="_blank" rel="noreferrer">查看仓库 ↗</a></div></article>
+				<article class="project"><div class="project-icon">→_</div><h3>LetMeDo</h3><p>多功能服务器插件。模块化设计，一个 jar 兼容 1.8.8+ 到最新版本，支持 Bukkit 与 Velocity / Bungee 代理端。</p><div class="project-tags"><span class="tag">JAVA 21</span><span class="tag">GRADLE</span><span class="tag">MIT</span><span class="tag tag-push">更新 2026-09-19</span></div><div class="project-foot"><span class="mono">main · 6389faa</span><span class="project-links"><a href="https://github.com/LetSeries/LetMeDo" target="_blank" rel="noreferrer">仓库 ↗</a><a href="https://github.com/LetSeries/LetMeDo#readme" target="_blank" rel="noreferrer">文档</a></span></div></article>
+				<article class="project"><div class="project-icon">□</div><h3>LetMeSee</h3><p>轻量只读容器查看工具，支持 Folia 与 Paper，让管理操作更直接。</p><div class="project-tags"><span class="tag">JAVA 21</span><span class="tag">PAPER · FOLIA</span><span class="tag tag-push">更新 2026-08-01</span></div><div class="project-foot"><span class="mono">main · 64874cb</span><span class="project-links"><a href="https://github.com/LetSeries/LetMeSee" target="_blank" rel="noreferrer">仓库 ↗</a><a href="https://github.com/LetSeries/LetMeSee#readme" target="_blank" rel="noreferrer">文档</a></span></div></article>
+				<article class="project"><div class="project-icon">?</div><h3>LetMeAsk</h3><p>服务器抢答活动插件。答题、经济奖励与人机验证，组成完整活动体验。</p><div class="project-tags"><span class="tag">JAVA 17</span><span class="tag">PAPER 1.20.4+</span><span class="tag">MIT</span><span class="tag tag-push">更新 2026-09-18</span></div><div class="project-foot"><span class="mono">main · 23263fc</span><span class="project-links"><a href="https://github.com/LetSeries/LetMeAsk" target="_blank" rel="noreferrer">仓库 ↗</a><a href="https://github.com/LetSeries/LetMeAsk#readme" target="_blank" rel="noreferrer">文档</a></span></div></article>
+				<article class="project"><div class="project-icon">AI</div><h3>Server-AI</h3><p>把 AI 带进 Minecraft。兼容 OpenAI 格式 API，并可通过自然语言控制 NPC。</p><div class="project-tags"><span class="tag">JAVA 21</span><span class="tag">PAPER · FOLIA</span><span class="tag">MIT</span><span class="tag tag-push">更新 2026-07-17</span></div><div class="project-foot"><span class="mono">main · 9682619</span><span class="project-links"><a href="https://github.com/LetSeries/Server-AI" target="_blank" rel="noreferrer">仓库 ↗</a><a href="https://github.com/LetSeries/Server-AI#readme" target="_blank" rel="noreferrer">文档</a></span></div></article>
+				<article class="project"><div class="project-icon">✓</div><h3>HumanVerify</h3><p>游戏内人机验证插件，提供多种验证模式，并通过 API 服务其他插件。</p><div class="project-tags"><span class="tag">JAVA 21</span><span class="tag">PAPER · FOLIA · PURPUR</span><span class="tag tag-push">更新 2026-08-30</span></div><div class="project-foot"><span class="mono">main · 843c29f</span><span class="project-links"><a href="https://github.com/LetSeries/HumanVerify" target="_blank" rel="noreferrer">仓库 ↗</a><a href="https://github.com/LetSeries/HumanVerify#readme" target="_blank" rel="noreferrer">文档</a></span></div></article>
+				<article class="project"><div class="project-icon">✎</div><h3>博客</h3><p>记录构建过程：兼容性、线程模型与开源协作中的具体答案。</p><div class="project-tags"><span class="tag">JOURNAL</span></div><div class="project-foot"><span class="mono">letseries.github.io</span><span class="project-links"><a href="blogs/index.html">阅读博客 →</a></span></div></article>
 			</div>
 		</div></section>
 
+		<section id="quickstart"><div class="wrap">
+			<div class="section-head"><div><div class="kicker mono">02 / QUICKSTART</div><h2>三分钟上手</h2></div><p class="section-note">对照你的服务端版本选插件，构建产物放入 plugins/ 目录即可。</p></div>
+			<div class="table-wrap"><table>
+				<thead><tr><th>项目</th><th>服务端</th><th>Java</th><th>依赖</th><th>构建</th></tr></thead>
+				<tbody>
+					<tr><td><a href="https://github.com/LetSeries/LetMeDo" target="_blank" rel="noreferrer">LetMeDo</a></td><td>Bukkit / Spigot / Paper / Folia 1.8.8+，Velocity / Bungee</td><td>21</td><td>无（反射降级）</td><td><code>./gradlew build</code></td></tr>
+					<tr><td><a href="https://github.com/LetSeries/LetMeSee" target="_blank" rel="noreferrer">LetMeSee</a></td><td>Paper / Folia</td><td>21</td><td>无</td><td><code>./gradlew build</code></td></tr>
+					<tr><td><a href="https://github.com/LetSeries/LetMeAsk" target="_blank" rel="noreferrer">LetMeAsk</a></td><td>Paper / Spigot 1.20.4+</td><td>17</td><td>Vault（推荐）、HumanVerify（可选）</td><td><code>mvn clean package</code></td></tr>
+					<tr><td><a href="https://github.com/LetSeries/Server-AI" target="_blank" rel="noreferrer">Server-AI</a></td><td>Paper / Folia 1.21.4+</td><td>21</td><td>OpenAI 兼容 API（或本地 Ollama）</td><td><code>mvn clean verify</code></td></tr>
+					<tr><td><a href="https://github.com/LetSeries/HumanVerify" target="_blank" rel="noreferrer">HumanVerify</a></td><td>Paper / Folia / Purpur 1.21.x</td><td>21</td><td>无</td><td><code>mvn package</code></td></tr>
+				</tbody>
+			</table></div>
+		</div></section>
+
 		<section id="about"><div class="wrap principles">
-			<div class="principles-copy"><div class="kicker mono">02 / PRINCIPLES</div><h2>小工具，<br>大讲究。</h2><p>我们相信服务器插件不应该增加维护负担。好的工具，会在复杂的环境里保持清晰，在关键时刻保持可靠。</p></div>
+			<div class="principles-copy"><div class="kicker mono">03 / PRINCIPLES</div><h2>小工具，<br>大讲究。</h2><p>我们相信服务器插件不应该增加维护负担。好的工具，会在复杂的环境里保持清晰，在关键时刻保持可靠。</p></div>
 			<div class="principle-list"><div class="principle"><div class="principle-number">01</div><div><h3>兼容优先</h3><p>面向真实的多版本、多服务端环境设计，尽可能优雅降级。</p></div></div><div class="principle"><div class="principle-number">02</div><div><h3>轻量可靠</h3><p>尊重服务器资源与区域线程，不让工具成为新的性能问题。</p></div></div><div class="principle"><div class="principle-number">03</div><div><h3>开放协作</h3><p>以开源项目连接开发者与服主，让反馈真正回到产品里。</p></div></div></div>
 		</div></section>
 
-		<section id="team"><div class="wrap team-band"><div class="team-panel"><div class="kicker mono">03 / THE TEAM</div><h2>一起把事情<br>做得更好。</h2><p>LetSeries 由一群关注 Minecraft 服务端体验的开发者共同维护，隶属于 CubeXMC 研究院。</p><a href="https://cubexmc.org/" target="_blank" rel="noreferrer">了解 CubeXMC 研究院 ↗</a></div><div class="people"><div class="person"><div class="person-avatar"><img src="images/FZAoao.png" alt="FZAoao"></div><strong>FZAoao</strong><small>Core contributor</small></div><div class="person"><div class="person-avatar"><img src="images/kevin-steve772.png" alt="kevin-steve772"></div><strong>kevin-steve772</strong><small>Core contributor</small></div><div class="person"><div class="person-avatar"><img src="images/angushushu.png" alt="angushushu"></div><strong>angushushu</strong><small>Contributor</small></div></div></div></section>
+		<section id="team"><div class="wrap team-band"><div class="team-panel"><div class="kicker mono">04 / THE TEAM</div><h2>一起把事情<br>做得更好。</h2><p>LetSeries 由一群关注 Minecraft 服务端体验的开发者共同维护，隶属于 CubeXMC 研究院。</p><a href="https://cubexmc.org/" target="_blank" rel="noreferrer">了解 CubeXMC 研究院 ↗</a></div><div class="people"><div class="person"><div class="person-avatar"><img src="images/FZAoao.png" alt="FZAoao"></div><strong>FZAoao</strong><small>Core contributor</small><span class="person-link"><a href="https://github.com/FZAoao" target="_blank" rel="noreferrer">GitHub →</a></span></div><div class="person"><div class="person-avatar"><img src="images/kevin-steve772.png" alt="kevin-steve772"></div><strong>kevin-steve772</strong><small>Core contributor</small><span class="person-link"><a href="https://github.com/kevin-steve772" target="_blank" rel="noreferrer">GitHub →</a></span></div><div class="person"><div class="person-avatar"><img src="images/angushushu.png" alt="angushushu"></div><strong>angushushu</strong><small>Contributor</small><span class="person-link"><a href="https://github.com/angushushu" target="_blank" rel="noreferrer">GitHub →</a></span></div></div></div></section>
+
+		<section id="contact"><div class="wrap">
+			<div class="section-head"><div><div class="kicker mono">05 / CONTACT</div><h2>找到我们</h2></div><p class="section-note">问题反馈请走对应仓库的 Issues；合作与加入请通过组织主页联系。</p></div>
+			<div class="contact-grid">
+				<div class="contact-card"><h3>GitHub 组织</h3><p>全部开源仓库、Issues 与 Releases 都在这里。</p><a class="card-link" href="https://github.com/LetSeries" target="_blank" rel="noreferrer">github.com/LetSeries ↗</a></div>
+				<div class="contact-card"><h3>CubeXMC 研究院</h3><p>LetSeries 隶属的上级组织与官网。</p><a class="card-link" href="https://cubexmc.org/" target="_blank" rel="noreferrer">cubexmc.org ↗</a></div>
+				<div class="contact-card"><h3>博客</h3><p>开发记录、设计取舍与版本动态。</p><a class="card-link" href="blogs/index.html">阅读博客 →</a></div>
+			</div>
+		</div></section>
 	</main>
-	<footer><div class="wrap footer-row"><span>© 2026 LetSeries · CubeXMC Research</span><div class="footer-links"><a href="https://github.com/LetSeries" target="_blank" rel="noreferrer">GitHub</a><a href="https://cubexmc.org/" target="_blank" rel="noreferrer">CubeX 官网</a></div></div></footer>
+	<footer><div class="wrap footer-row"><span>© <span id="year">2026</span> LetSeries · CubeXMC Research</span><div class="footer-links"><a href="blogs/index.html">博客</a><a href="sitemap.xml">站点地图</a><a href="https://github.com/LetSeries" target="_blank" rel="noreferrer">GitHub</a><a href="https://cubexmc.org/" target="_blank" rel="noreferrer">CubeX 官网</a></div></div></footer>
+	<button class="to-top" id="to-top" type="button" aria-label="返回顶部">↑</button>
+	<script>
+		(function () {
+			var root = document.documentElement;
+
+			// 主题：跟随系统，允许手动覆盖并记住选择
+			var toggle = document.getElementById("theme-toggle");
+			try {
+				var saved = localStorage.getItem("ls-theme");
+				if (saved === "light" || saved === "dark") root.setAttribute("data-theme", saved);
+			} catch (e) {}
+			function syncToggle() {
+				var dark = root.getAttribute("data-theme") === "dark" ||
+					(!root.getAttribute("data-theme") && window.matchMedia("(prefers-color-scheme: dark)").matches);
+				toggle.setAttribute("aria-pressed", dark ? "true" : "false");
+				toggle.textContent = dark ? "☾" : "◐";
+			}
+			toggle.addEventListener("click", function () {
+				var next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+				root.setAttribute("data-theme", next);
+				try { localStorage.setItem("ls-theme", next); } catch (e) {}
+				syncToggle();
+			});
+			syncToggle();
+
+			// 移动端导航
+			var navToggle = document.getElementById("nav-toggle");
+			var navLinks = document.getElementById("nav-links");
+			navToggle.addEventListener("click", function () {
+				var open = navLinks.classList.toggle("open");
+				navToggle.setAttribute("aria-expanded", open ? "true" : "false");
+				navToggle.setAttribute("aria-label", open ? "关闭导航菜单" : "打开导航菜单");
+			});
+			navLinks.addEventListener("click", function (event) {
+				if (event.target.tagName === "A") {
+					navLinks.classList.remove("open");
+					navToggle.setAttribute("aria-expanded", "false");
+				}
+			});
+
+			// 返回顶部
+			var toTop = document.getElementById("to-top");
+			function onScroll() { toTop.classList.toggle("is-visible", window.scrollY > 600); }
+			window.addEventListener("scroll", onScroll, { passive: true });
+			onScroll();
+			toTop.addEventListener("click", function () { window.scrollTo({ top: 0, behavior: "smooth" }); });
+
+			// 年份
+			document.getElementById("year").textContent = new Date().getFullYear();
+		})();
+	</script>
 </body>
 </html>
