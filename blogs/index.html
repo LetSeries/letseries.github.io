@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="LetSeries 博客，记录 Minecraft 服务端开发、插件设计与开源实践。">
+  <title>博客 · LetSeries</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@500;600;700;800&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root { color-scheme: light dark; --bg: #f4f7f1; --surface: #fff; --text: #17231c; --muted: #647067; --line: #d7e0d5; --green: #16834b; --green-deep: #0d5833; --green-pale: #cfe9d4; }
+    @media (prefers-color-scheme: dark) { :root { --bg: #111813; --surface: #18241b; --text: #edf5eb; --muted: #a6b7a9; --line: #304436; --green: #56ce83; --green-deep: #b1f2c4; --green-pale: #254b32; } }
+    * { box-sizing: border-box; } body { margin: 0; color: var(--text); background: var(--bg); font-family: "Noto Sans SC", "Manrope", sans-serif; line-height: 1.7; }
+    a { color: inherit; text-decoration: none; } .wrap { width: min(100% - 48px, 980px); margin: 0 auto; } .mono { font-family: "DM Mono", monospace; letter-spacing: .03em; }
+    header { border-bottom: 1px solid var(--line); } .nav { height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+    .brand { display: flex; align-items: center; gap: 11px; font-size: 19px; font-weight: 900; letter-spacing: -.04em; } .brand-mark { width: 34px; height: 34px; overflow: hidden; border-radius: 9px; background: var(--green); } .brand-mark img { width: 100%; height: 100%; object-fit: cover; }
+    .back { color: var(--muted); font-size: 14px; } .back:hover, .article-link:hover { color: var(--green); }
+    main { padding: 90px 0 110px; } .eyebrow { color: var(--green); font-size: 12px; font-weight: 700; text-transform: uppercase; } h1 { margin: 12px 0 16px; font-size: clamp(44px, 8vw, 76px); line-height: 1.08; letter-spacing: -.07em; } .intro { max-width: 590px; color: var(--muted); font-size: 16px; }
+    .post-list { display: grid; gap: 14px; margin-top: 62px; } .post { display: grid; grid-template-columns: 120px 1fr auto; gap: 28px; align-items: center; padding: 26px 0; border-top: 1px solid var(--line); } .post:last-child { border-bottom: 1px solid var(--line); }
+    .post-number { color: var(--green); font-size: 13px; } .post h2 { margin: 0 0 7px; font-size: 23px; letter-spacing: -.04em; } .post p { max-width: 580px; margin: 0; color: var(--muted); font-size: 14px; } .post-meta { margin-top: 11px; color: var(--muted); font-size: 11px; }
+    .article-actions { display: flex; flex-direction: column; align-items: flex-end; gap: 9px; }
+    .article-link, .source-link { border: 0; background: none; color: var(--green); cursor: pointer; font: inherit; font-size: 13px; font-weight: 700; white-space: nowrap; } .source-link { color: var(--muted); font-size: 11px; font-weight: 400; } .article-link:hover, .source-link:hover { color: var(--green-deep); }
+    .reader { display: none; margin-top: 48px; padding: clamp(24px, 5vw, 54px); border: 1px solid var(--line); border-radius: 10px; background: var(--surface); } .reader.is-open { display: block; } .reader-top { display: flex; justify-content: space-between; gap: 20px; padding-bottom: 25px; border-bottom: 1px solid var(--line); } .reader-kicker { color: var(--green); font-size: 12px; } .reader-close { border: 1px solid var(--line); border-radius: 6px; padding: 7px 11px; color: var(--muted); background: transparent; cursor: pointer; font: inherit; font-size: 12px; } .reader-close:hover { border-color: var(--green); color: var(--green); }
+    .markdown { max-width: 710px; margin: 32px auto 0; font-size: 15px; } .markdown h1 { margin: 0 0 12px; font-size: clamp(30px, 5vw, 46px); letter-spacing: -.06em; } .markdown h2 { margin: 37px 0 10px; font-size: 24px; letter-spacing: -.04em; } .markdown p { margin: 14px 0; } .markdown blockquote { margin: 22px 0; padding: 8px 18px; border-left: 3px solid var(--green); color: var(--muted); } .markdown ul, .markdown ol { padding-left: 24px; } .markdown li { padding: 3px 0; } .markdown code { padding: 2px 5px; border-radius: 4px; color: var(--green-deep); background: var(--green-pale); font-family: "DM Mono", monospace; font-size: .88em; } .markdown a { color: var(--green); text-decoration: underline; text-underline-offset: 3px; }
+    @media (max-width: 650px) { .wrap { width: min(100% - 32px, 560px); } .nav { height: 68px; } main { padding: 65px 0 80px; } .post { grid-template-columns: 1fr; gap: 9px; padding: 23px 0; } .post-number { order: -1; } .article-actions { align-items: flex-start; flex-direction: row; flex-wrap: wrap; margin-top: 5px; } .footer-row { display: block; } .footer-links { margin-top: 10px; } }
+  </style>
+</head>
+<body>
+  <header><div class="wrap nav"><a class="brand" href="../"><span class="brand-mark"><img src="../images/LetSeries.png" alt=""></span><span>LetSeries</span></a></div></header>
+  <main><div class="wrap"><div class="eyebrow mono">LetSeries / JOURNAL</div><h1>博客</h1><p class="intro">记录我们如何构建 Minecraft 服务端工具，也分享兼容性、线程模型和开源协作中的一些具体答案。</p>
+    <div class="post-list">
+      <article class="post"><div class="post-number mono">01 / 2026.09.19</div><div><h2>LetSeries成立</h2><p>LetSeries发布的第一篇文章！</p><div class="post-meta mono">LETSeries · PRODUCT</div></div><div class="article-actions"><button class="article-link" data-article="letseries">阅读全文 ↓</button><a class="source-link" href="letseries.md">Markdown 源文 ↗</a></div></article>
+    </div>
+    <section class="reader" id="reader" aria-live="polite"><div class="reader-top"><span class="reader-kicker mono" id="reader-kicker">LETSeries / ARTICLE</span><button class="reader-close" id="reader-close" type="button">收起文章 ×</button></div><article class="markdown" id="markdown-content"></article></section>
+  </div></main>
+  <script type="text/plain" id="letseries"># LetSeries成立了！
+> kevin-steve772 / 2026/9/19
+
+我们在2026/9/9这一天成立了LetSeries！
+
+感谢CubeX玩家们的支持，我们将在LetSeries组织里创建更多的插件，为CubeX服务器服务，也为服务器的玩家们服务。
+
+我们把某些插件的GitHub仓库fork到了这个组织。包括`LetMeAsk`,`LetMeSee`等标志性插件。
+
+在GitHub上可以查阅：[https://github.com/LetSeries](https://github.com/LetSeries)
+
+我们的口号是：
+
+**LetSeries，让服务器好用一点。**</script>
+  
+  <script>
+    const reader = document.getElementById("reader");
+    const content = document.getElementById("markdown-content");
+    const kicker = document.getElementById("reader-kicker");
+    const articles = { letseries: "letseries"};
+
+    function escapeHtml(value) {
+      return value.replace(/[&<>"']/g, character => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[character]));
+    }
+
+    function inlineMarkdown(value) {
+      return escapeHtml(value)
+        .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+        .replace(/`(.+?)`/g, "<code>$1</code>")
+        .replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g, '<a href="$2" target="_blank" rel="noreferrer">$1</a>');
+    }
+
+    function renderMarkdown(markdown) {
+      const lines = markdown.trim().split("\n");
+      const output = [];
+      let paragraph = [];
+      let listType = null;
+
+      function flushParagraph() { if (paragraph.length) { output.push(`<p>${inlineMarkdown(paragraph.join(" "))}</p>`); paragraph = []; } }
+      function closeList() { if (listType) { output.push(`</${listType}>`); listType = null; } }
+
+      lines.forEach(line => {
+        if (!line.trim()) { flushParagraph(); closeList(); return; }
+        if (line.startsWith("# ")) { flushParagraph(); closeList(); output.push(`<h1>${inlineMarkdown(line.slice(2))}</h1>`); return; }
+        if (line.startsWith("## ")) { flushParagraph(); closeList(); output.push(`<h2>${inlineMarkdown(line.slice(3))}</h2>`); return; }
+        if (line.startsWith("> ")) { flushParagraph(); closeList(); output.push(`<blockquote>${inlineMarkdown(line.slice(2))}</blockquote>`); return; }
+        const unordered = line.match(/^- (.+)$/); const ordered = line.match(/^\d+\. (.+)$/);
+        if (unordered || ordered) { flushParagraph(); const nextType = unordered ? "ul" : "ol"; if (listType !== nextType) { closeList(); output.push(`<${nextType}>`); listType = nextType; } output.push(`<li>${inlineMarkdown((unordered || ordered)[1])}</li>`); return; }
+        closeList(); paragraph.push(line.trim());
+      });
+      flushParagraph(); closeList(); return output.join("");
+    }
+
+    document.querySelectorAll("[data-article]").forEach(button => button.addEventListener("click", () => {
+      const articleId = articles[button.dataset.article];
+      content.innerHTML = renderMarkdown(document.getElementById(articleId).textContent);
+      kicker.textContent = `LETSeries / ${button.dataset.article.toUpperCase()}`;
+      reader.classList.add("is-open"); reader.scrollIntoView({ behavior: "smooth", block: "start" });
+    }));
+    document.getElementById("reader-close").addEventListener("click", () => { reader.classList.remove("is-open"); });
+  </script>
+</body>
+</html>
