@@ -1,3 +1,7 @@
+<!--
+编辑博客可能有点难qwq
+37、45、74行的注释可能会帮上一点忙
+-->
 <!doctype html>
 <html lang="zh-CN">
 <head>
@@ -30,12 +34,25 @@
   <header><div class="wrap nav"><a class="brand" href="../"><span class="brand-mark"><img src="../images/LetSeries.png" alt=""></span><span>LetSeries</span></a></div></header>
   <main><div class="wrap"><div class="eyebrow mono">LetSeries / JOURNAL</div><h1>博客</h1><p class="intro">记录我们如何构建 Minecraft 服务端工具，也分享兼容性、线程模型和开源协作中的一些具体答案。</p>
     <div class="post-list">
-      <article class="post"><div class="post-number mono">01 / 2026.09.19</div><div><h2>LetSeries成立</h2><p>LetSeries发布的第一篇文章！</p><div class="post-meta mono">LETSeries · PRODUCT</div></div><div class="article-actions"><button class="article-link" data-article="letseries">阅读全文 ↓</button><a class="source-link" href="letseries.md">Markdown 源文 ↗</a></div></article>
+      <!--
+      博客列表。
+      <article class="post"><div class="post-number mono">xx / xxxx.xx.xx</div><div><h2>标题</h2><p>副标题</p><div class="post-meta mono">LETSeries · PRODUCT</div></div><div class="article-actions"><button class="article-link" data-article="博客id">阅读全文</button><a class="source-link" href="<源文件>">Markdown 源文</a></div></article>
+      -->
+      <article class="post"><div class="post-number mono">01 / 2026.09.19</div><div><h2>LetSeries成立</h2><p>LetSeries发布的第一篇文章！</p><div class="post-meta mono">LETSeries · PRODUCT</div></div><div class="article-actions"><button class="article-link" data-article="letseries">阅读全文</button><a class="source-link" href="letseries.md">Markdown 源文</a></div></article>
     </div>
     <section class="reader" id="reader" aria-live="polite"><div class="reader-top"><span class="reader-kicker mono" id="reader-kicker">LETSeries / ARTICLE</span><button class="reader-close" id="reader-close" type="button">收起文章 ×</button></div><article class="markdown" id="markdown-content"></article></section>
   </div></main>
+  <!--
+  这里是博客内容。
+  下面是一个博客内容的示例（支持markdown）:
+
+  <script type="text/plain" id="test_blog"># test blog
+  > LetSeries  |  2026/9/19
+  
+  这是一个示例博客！</script>
+  -->
   <script type="text/plain" id="letseries"># LetSeries成立了！
-> kevin-steve772 / 2026/9/19
+> kevin-steve772  |  2026/9/19
 
 我们在2026/9/9这一天成立了LetSeries！
 
@@ -53,7 +70,12 @@
     const reader = document.getElementById("reader");
     const content = document.getElementById("markdown-content");
     const kicker = document.getElementById("reader-kicker");
-    const articles = { letseries: "letseries"};
+    const articles = {
+        // 在这里添加博客项目。
+        // 格式：<博客id>: "<博客id>",
+        letseries: "letseries"
+
+    };
 
     function escapeHtml(value) {
       return value.replace(/[&<>"']/g, character => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[character]));
