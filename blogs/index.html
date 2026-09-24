@@ -1,6 +1,8 @@
 <!--
-编辑博客可能有点难qwq
-37、45、74行的注释可能会帮上一点忙
+博客发布流程（只需两步）：
+1. 在 blogs/ 下新增 <id>.md（UTF-8，标题用 # 开头）；
+2. 在下面的 .post-list 里加一条 <article class="post">（照抄模板，改 data-id / data-src / data-tags / data-date / 标题 / 简介）。
+正文只存 .md 一份，阅读器打开时自动 fetch 加载渲染。
 -->
 <!doctype html>
 <html lang="zh-CN">
@@ -23,200 +25,400 @@
   <meta name="twitter:description" content="记录我们如何构建 Minecraft 服务端工具。">
   <link rel="icon" type="image/png" href="../images/LetSeries.png">
   <title>博客 · LetSeries</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@500;600;700;800&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
   <style>
-    :root { color-scheme: light dark; --bg: #f4f7f1; --surface: #fff; --text: #17231c; --muted: #647067; --line: #d7e0d5; --green: #16834b; --green-deep: #0d5833; --green-pale: #cfe9d4; }
-    @media (prefers-color-scheme: dark) { :root { --bg: #111813; --surface: #18241b; --text: #edf5eb; --muted: #a6b7a9; --line: #304436; --green: #56ce83; --green-deep: #b1f2c4; --green-pale: #254b32; } }
+    :root { color-scheme: light dark; --bg: #f4f7f1; --surface: #fff; --surface-soft: #eaf1e8; --text: #17231c; --muted: #647067; --line: #d7e0d5; --green: #16834b; --green-deep: #0d5833; --green-pale: #cfe9d4; }
+    @media (prefers-color-scheme: dark) { :root { --bg: #111813; --surface: #18241b; --surface-soft: #203126; --text: #edf5eb; --muted: #a6b7a9; --line: #304436; --green: #56ce83; --green-deep: #b1f2c4; --green-pale: #254b32; } }
     * { box-sizing: border-box; } body { margin: 0; color: var(--text); background: var(--bg); font-family: "Noto Sans SC", "Manrope", sans-serif; line-height: 1.7; }
     a { color: inherit; text-decoration: none; } .wrap { width: min(100% - 48px, 980px); margin: 0 auto; } .mono { font-family: "DM Mono", monospace; letter-spacing: .03em; }
+    :focus-visible { outline: 2px solid var(--green); outline-offset: 3px; border-radius: 4px; }
     header { border-bottom: 1px solid var(--line); } .nav { height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
     .brand { display: flex; align-items: center; gap: 11px; font-size: 19px; font-weight: 900; letter-spacing: -.04em; } .brand-mark { width: 34px; height: 34px; overflow: hidden; border-radius: 9px; background: var(--green); } .brand-mark img { width: 100%; height: 100%; object-fit: cover; }
     .back { color: var(--muted); font-size: 14px; } .back:hover, .article-link:hover { color: var(--green); }
     main { padding: 90px 0 110px; } .eyebrow { color: var(--green); font-size: 12px; font-weight: 700; text-transform: uppercase; } h1 { margin: 12px 0 16px; font-size: clamp(44px, 8vw, 76px); line-height: 1.08; letter-spacing: -.07em; } .intro { max-width: 590px; color: var(--muted); font-size: 16px; }
-    .post-list { display: grid; gap: 14px; margin-top: 62px; } .post { display: grid; grid-template-columns: 120px 1fr auto; gap: 28px; align-items: center; padding: 26px 0; border-top: 1px solid var(--line); } .post:last-child { border-bottom: 1px solid var(--line); }
+
+    .toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 40px; }
+    .search { flex: 1 1 240px; display: flex; align-items: center; gap: 8px; padding: 10px 14px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+    .search input { flex: 1; border: 0; background: transparent; color: var(--text); font: inherit; font-size: 14px; outline: none; }
+    .search input::placeholder { color: var(--muted); }
+    .chip-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+    .chip-btn { padding: 6px 13px; border: 1px solid var(--line); border-radius: 20px; background: var(--surface); color: var(--muted); cursor: pointer; font: inherit; font-size: 12px; }
+    .chip-btn:hover { border-color: var(--green); color: var(--green); }
+    .chip-btn.active { border-color: var(--green); background: var(--green); color: #fff; }
+
+    .post-list { display: grid; gap: 14px; margin-top: 34px; } .post { display: grid; grid-template-columns: 120px 1fr auto; gap: 28px; align-items: center; padding: 26px 0; border-top: 1px solid var(--line); } .post:last-child { border-bottom: 1px solid var(--line); }
+    .post[hidden] { display: none; }
     .post-number { color: var(--green); font-size: 13px; } .post h2 { margin: 0 0 7px; font-size: 23px; letter-spacing: -.04em; } .post p { max-width: 580px; margin: 0; color: var(--muted); font-size: 14px; } .post-meta { margin-top: 11px; color: var(--muted); font-size: 11px; }
+    .post-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+    .ptag { padding: 2px 9px; border-radius: 4px; background: var(--surface-soft); color: var(--muted); font-size: 11px; }
     .article-actions { display: flex; flex-direction: column; align-items: flex-end; gap: 9px; }
     .article-link, .source-link { border: 0; background: none; color: var(--green); cursor: pointer; font: inherit; font-size: 13px; font-weight: 700; white-space: nowrap; } .source-link { color: var(--muted); font-size: 11px; font-weight: 400; } .article-link:hover, .source-link:hover { color: var(--green-deep); }
-    .reader { display: none; margin-top: 48px; padding: clamp(24px, 5vw, 54px); border: 1px solid var(--line); border-radius: 10px; background: var(--surface); } .reader.is-open { display: block; } .reader-top { display: flex; justify-content: space-between; gap: 20px; padding-bottom: 25px; border-bottom: 1px solid var(--line); } .reader-kicker { color: var(--green); font-size: 12px; } .reader-close { border: 1px solid var(--line); border-radius: 6px; padding: 7px 11px; color: var(--muted); background: transparent; cursor: pointer; font: inherit; font-size: 12px; } .reader-close:hover { border-color: var(--green); color: var(--green); }
-    .markdown { max-width: 710px; margin: 32px auto 0; font-size: 15px; } .markdown h1 { margin: 0 0 12px; font-size: clamp(30px, 5vw, 46px); letter-spacing: -.06em; } .markdown h2 { margin: 37px 0 10px; font-size: 24px; letter-spacing: -.04em; } .markdown p { margin: 14px 0; } .markdown blockquote { margin: 22px 0; padding: 8px 18px; border-left: 3px solid var(--green); color: var(--muted); } .markdown ul, .markdown ol { padding-left: 24px; } .markdown li { padding: 3px 0; } .markdown code { padding: 2px 5px; border-radius: 4px; color: var(--green-deep); background: var(--green-pale); font-family: "DM Mono", monospace; font-size: .88em; } .markdown a { color: var(--green); text-decoration: underline; text-underline-offset: 3px; }
-    @media (max-width: 650px) { .wrap { width: min(100% - 32px, 560px); } .nav { height: 68px; } main { padding: 65px 0 80px; } .post { grid-template-columns: 1fr; gap: 9px; padding: 23px 0; } .post-number { order: -1; } .article-actions { align-items: flex-start; flex-direction: row; flex-wrap: wrap; margin-top: 5px; } .footer-row { display: block; } .footer-links { margin-top: 10px; } }
+    .empty-hint { display: none; padding: 40px 0; color: var(--muted); font-size: 14px; text-align: center; }
+    .empty-hint.is-show { display: block; }
+
+    .progress { position: fixed; top: 0; left: 0; z-index: 30; width: 100%; height: 3px; background: transparent; }
+    .progress span { display: block; height: 100%; width: 0; background: var(--green); transition: width .1s linear; }
+    .reader { display: none; margin-top: 48px; padding: clamp(24px, 5vw, 54px); border: 1px solid var(--line); border-radius: 10px; background: var(--surface); } .reader.is-open { display: block; } .reader-top { display: flex; justify-content: space-between; align-items: center; gap: 20px; padding-bottom: 25px; border-bottom: 1px solid var(--line); } .reader-kicker { color: var(--green); font-size: 12px; } .reader-close { border: 1px solid var(--line); border-radius: 6px; padding: 7px 11px; color: var(--muted); background: transparent; cursor: pointer; font: inherit; font-size: 12px; } .reader-close:hover { border-color: var(--green); color: var(--green); }
+    .reader-loading { padding: 48px 0; text-align: center; color: var(--muted); font-size: 14px; }
+    .spinner { display: inline-block; width: 22px; height: 22px; margin-right: 10px; border: 3px solid var(--line); border-top-color: var(--green); border-radius: 50%; vertical-align: -5px; animation: spin .8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .reader-error { padding: 40px 0; text-align: center; color: var(--muted); font-size: 14px; }
+    .markdown { max-width: 710px; margin: 32px auto 0; font-size: 15px; }
+    .markdown h1 { margin: 0 0 12px; font-size: clamp(30px, 5vw, 46px); letter-spacing: -.06em; }
+    .markdown h2 { margin: 37px 0 10px; font-size: 24px; letter-spacing: -.04em; }
+    .markdown h3 { margin: 28px 0 8px; font-size: 19px; letter-spacing: -.03em; }
+    .markdown p { margin: 14px 0; }
+    .markdown blockquote { margin: 22px 0; padding: 8px 18px; border-left: 3px solid var(--green); color: var(--muted); }
+    .markdown ul, .markdown ol { padding-left: 24px; } .markdown li { padding: 3px 0; }
+    .markdown li > ul, .markdown li > ol { margin: 4px 0; }
+    .markdown input[type="checkbox"] { margin-right: 7px; accent-color: var(--green); }
+    .markdown code { padding: 2px 5px; border-radius: 4px; color: var(--green-deep); background: var(--green-pale); font-family: "DM Mono", monospace; font-size: .88em; }
+    .markdown a { color: var(--green); text-decoration: underline; text-underline-offset: 3px; }
+    .markdown hr { margin: 30px 0; border: 0; border-top: 1px solid var(--line); }
+    .markdown img { max-width: 100%; border-radius: 8px; }
+    .markdown figure { margin: 22px 0; text-align: center; }
+    .markdown figcaption { margin-top: 8px; color: var(--muted); font-size: 12px; }
+    .markdown table { display: block; width: 100%; overflow-x: auto; margin: 20px 0; border: 1px solid var(--line); border-radius: 8px; border-collapse: collapse; font-size: 14px; }
+    .markdown th, .markdown td { padding: 10px 14px; border-bottom: 1px solid var(--line); text-align: left; white-space: nowrap; }
+    .markdown thead th { background: var(--surface-soft); font-weight: 700; }
+    .markdown tbody tr:last-child th, .markdown tbody tr:last-child td { border-bottom: 0; }
+    .code-block { margin: 20px 0; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+    .code-head { display: flex; justify-content: space-between; align-items: center; padding: 7px 12px; background: var(--surface-soft); color: var(--muted); font-family: "DM Mono", monospace; font-size: 11px; }
+    .copy-btn { border: 1px solid var(--line); border-radius: 5px; padding: 3px 10px; background: transparent; color: var(--muted); cursor: pointer; font: inherit; font-size: 11px; }
+    .copy-btn:hover { border-color: var(--green); color: var(--green); }
+    .markdown pre { margin: 0; padding: 14px 16px; overflow-x: auto; background: var(--surface); }
+    .markdown pre code { padding: 0; background: none; color: var(--text); font-size: 13px; line-height: 1.7; }
+    .reader-nav { display: flex; justify-content: space-between; gap: 12px; max-width: 710px; margin: 44px auto 0; }
+    .reader-nav button { flex: 1; padding: 13px 16px; border: 1px solid var(--line); border-radius: 8px; background: transparent; color: var(--text); cursor: pointer; font: inherit; font-size: 13px; text-align: left; }
+    .reader-nav button:hover:not(:disabled) { border-color: var(--green); }
+    .reader-nav button:disabled { opacity: .35; cursor: default; }
+    .reader-nav small { display: block; color: var(--muted); font-size: 11px; }
+    @media (max-width: 650px) { .wrap { width: min(100% - 32px, 560px); } .nav { height: 68px; } main { padding: 65px 0 80px; } .post { grid-template-columns: 1fr; gap: 9px; padding: 23px 0; } .post-number { order: -1; } .article-actions { align-items: flex-start; flex-direction: row; flex-wrap: wrap; margin-top: 5px; } .footer-row { display: block; } .footer-links { margin-top: 10px; } .reader-nav { flex-direction: column; } }
   </style>
 </head>
 <body>
-  <header><div class="wrap nav"><a class="brand" href="../"><span class="brand-mark"><img src="../images/LetSeries.png" alt=""></span><span>LetSeries</span></a></div></header>
+  <div class="progress" aria-hidden="true"><span id="progress-bar"></span></div>
+  <header><div class="wrap nav"><a class="brand" href="../"><span class="brand-mark"><img src="../images/LetSeries.png" alt=""></span><span>LetSeries</span></a><a class="back" href="../">← 回首页</a></div></header>
   <main><div class="wrap"><div class="eyebrow mono">LetSeries / JOURNAL</div><h1>博客</h1><p class="intro">记录我们如何构建 Minecraft 服务端工具，也分享兼容性、线程模型和开源协作中的一些具体答案。</p>
-    <div class="post-list">
-      <!--
-      博客列表。
-      <article class="post"><div class="post-number mono">xx / xxxx.xx.xx</div><div><h2>标题</h2><p>副标题</p><div class="post-meta mono">LETSeries · PRODUCT</div></div><div class="article-actions"><button class="article-link" data-article="博客id">阅读全文</button><a class="source-link" href="<源文件>">Markdown 源文</a></div></article>
-      -->
-      <article class="post"><div class="post-number mono">03 / 2026.09.23</div><div><h2>LetMeAsk：把答题做成服务器活动</h2><p>定时出题、经济奖励、防刷验证与持久化统计。</p><div class="post-meta mono">LETSeries · PRODUCT</div></div><div class="article-actions"><button class="article-link" data-article="letmeask">阅读全文</button><a class="source-link" href="letmeask.md">Markdown 源文</a></div></article>
-      <article class="post"><div class="post-number mono">02 / 2026.09.19</div><div><h2>HumanVerify：进服先验证</h2><p>多种验证模式、Folia 区域线程兼容，以及开放的验证 API。</p><div class="post-meta mono">LETSeries · PRODUCT</div></div><div class="article-actions"><button class="article-link" data-article="humanverify">阅读全文</button><a class="source-link" href="humanverify.md">Markdown 源文</a></div></article>
-      <article class="post"><div class="post-number mono">01 / 2026.09.19</div><div><h2>LetSeries成立</h2><p>LetSeries发布的第一篇文章！</p><div class="post-meta mono">LETSeries · PRODUCT</div></div><div class="article-actions"><button class="article-link" data-article="letseries">阅读全文</button><a class="source-link" href="letseries.md">Markdown 源文</a></div></article>
+    <div class="toolbar" role="search">
+      <label class="search"><span aria-hidden="true">⌕</span><input id="search-input" type="search" placeholder="搜索标题、简介、标签…" aria-label="搜索博客"></label>
     </div>
-    <section class="reader" id="reader" aria-live="polite"><div class="reader-top"><span class="reader-kicker mono" id="reader-kicker">LETSeries / ARTICLE</span><button class="reader-close" id="reader-close" type="button">收起文章 ×</button></div><article class="markdown" id="markdown-content"></article></section>
+    <div class="chip-row" id="chip-row" aria-label="按标签筛选"></div>
+    <div class="post-list" id="post-list">
+      <!--
+      新增文章模板（照抄改值即可）：
+      <article class="post" data-id="<唯一id>" data-src="<正文md文件名>" data-tags="<标签1,标签2>" data-date="<日期>"><div class="post-number mono">NN / YYYY.MM.DD</div><div><h2>标题</h2><p>一句话简介</p><div class="post-meta mono">LETSeries · PRODUCT</div><div class="post-tags"><span class="ptag">标签1</span><span class="ptag">标签2</span></div></div><div class="article-actions"><button class="article-link" data-open="<唯一id>">阅读全文</button><a class="source-link" href="<正文md文件名>">Markdown 源文</a></div></article>
+      -->
+      <article class="post" data-id="letmeask" data-src="letmeask.md" data-tags="插件,活动" data-date="2026.09.23"><div class="post-number mono">03 / 2026.09.23</div><div><h2>LetMeAsk：把答题做成服务器活动</h2><p>定时出题、经济奖励、防刷验证与持久化统计。</p><div class="post-meta mono">LETSeries · PRODUCT</div><div class="post-tags"><span class="ptag">插件</span><span class="ptag">活动</span></div></div><div class="article-actions"><button class="article-link" data-open="letmeask">阅读全文</button><a class="source-link" href="letmeask.md">Markdown 源文</a></div></article>
+      <article class="post" data-id="humanverify" data-src="humanverify.md" data-tags="插件,验证" data-date="2026.09.19"><div class="post-number mono">02 / 2026.09.19</div><div><h2>HumanVerify：进服先验证</h2><p>多种验证模式、Folia 区域线程兼容，以及开放的验证 API。</p><div class="post-meta mono">LETSeries · PRODUCT</div><div class="post-tags"><span class="ptag">插件</span><span class="ptag">验证</span></div></div><div class="article-actions"><button class="article-link" data-open="humanverify">阅读全文</button><a class="source-link" href="humanverify.md">Markdown 源文</a></div></article>
+      <article class="post" data-id="letseries" data-src="letseries.md" data-tags="公告" data-date="2026.09.19"><div class="post-number mono">01 / 2026.09.19</div><div><h2>LetSeries成立</h2><p>LetSeries发布的第一篇文章！</p><div class="post-meta mono">LETSeries · PRODUCT</div><div class="post-tags"><span class="ptag">公告</span></div></div><div class="article-actions"><button class="article-link" data-open="letseries">阅读全文</button><a class="source-link" href="letseries.md">Markdown 源文</a></div></article>
+    </div>
+    <div class="empty-hint" id="empty-hint">没有匹配的文章，换个关键词试试。</div>
+    <section class="reader" id="reader" aria-live="polite">
+      <div class="reader-top"><span class="reader-kicker mono" id="reader-kicker">LETSeries / ARTICLE</span><button class="reader-close" id="reader-close" type="button">收起文章 ×</button></div>
+      <div id="reader-body"><article class="markdown" id="markdown-content"></article></div>
+      <nav class="reader-nav" id="reader-nav" aria-label="上下篇">
+        <button id="nav-prev" type="button"><small>← 上一篇</small><span id="nav-prev-title"></span></button>
+        <button id="nav-next" type="button"><small>下一篇 →</small><span id="nav-next-title"></span></button>
+      </nav>
+    </section>
+    <noscript><p style="color: var(--muted)">在线阅读需要 JavaScript；可直接点击每篇的「Markdown 源文」查看原文。</p></noscript>
   </div></main>
-  <!--
-  这里是博客内容。
-  下面是一个博客内容的示例（支持markdown）:
-
-  <script type="text/plain" id="test_blog"># test blog
-  > LetSeries  |  2026/9/19
-  
-  这是一个示例博客！</script>
-  -->
-  <script type="text/plain" id="letmeask"># LetMeAsk：把答题做成服务器活动
-
-> LetSeries  |  2026/9/23
-
-## 一个聊天栏里的抢答游戏
-
-[LetMeAsk](https://github.com/LetSeries/LetMeAsk) 定时在聊天栏发布题目，玩家抢答，答对拿金币。规则很简单，但要把“抢答”做成长期稳定的服务器活动，细节一点都不少：题目从哪来、奖励谁来出、答错了怎么办、脚本刷奖怎么防、统计存在哪——这篇文章把这些答案一次讲清。
-
-## 出题：间隔、超时与题库
-
-出题节拍由 `base.yml` 控制：默认每 60 秒出一题，30 秒无人答对就公布答案并出下一题。题库写在 `questions.yml` 里，支持纯文本与带权重的题目：
-
-- `中国首都=北京`：题目 = 答案，多答案用 `|` 分隔，答对任一即可
-- `{q: ..., a: ..., weight: 2}`：权重越大越容易被抽中
-
-解析时会自动去重并告警，`/letmeask status` 能看到当前题库数量，`/letmeask question [force]` 可手动出一题，`/letmeask start` 会立刻出一题而不是干等一轮间隔。
-
-## 发奖：谁出钱、发给谁
-
-经济走 Vault，扣款方（`payer`）可配：服务器出资（`Server`）、指定玩家名、UUID，乃至 `littleskin:` 账号。发奖时优先按 UUID 落到离线玩家，避免玩家改名导致错发；题目携带 id 校验，旧题答案领不走新题奖励。没有 Vault 也不摆烂：自动降级为纯公告模式，出题照常。
-
-## 防刷：模糊匹配 + 人机验证
-
-答案支持模糊匹配，相似度阈值默认 0.75，设为 1.0 即严格精确匹配；超长聊天消息直接拒绝。真正的刷奖脚本靠两道阀值拦：
-
-- 回答用时过快（默认 ≤ 1 秒，支持小数）触发 [HumanVerify](https://github.com/LetSeries/HumanVerify) 验证
-- 同一玩家连续答对过多（默认 3 次，带 300 秒时间窗口衰减）同样触发验证
-
-验证期间本轮锁定，回调带 epoch 校验，跨 reload 的旧回调直接丢弃；验证本身也有 120 秒超时兜底，过期自动解锁并作废本轮，不会把正常玩家卡死。
-
-## 统计：持久化与排行榜
-
-累计出题数、答对数、每人答对次数与奖金存在 `stats.yml`。落盘是增量的：每 30 秒只写变更玩家，约 5 分钟全量一次，停服不丢数。`/letmeask top [数量]` 看排行榜（默认前 10），`/letmeask stats [玩家名]` 查个人战绩；最新版还把离线名查询做了缓存，top 榜不再反复读磁盘，未知玩家回退显示 UUID 前 8 位。
-
-## 环境与构建
-
-需要 Paper / Spigot 1.20.4+ 与 Java 17，HumanVerify 与 CMI 都是可选依赖：
-
-- `mvn clean package`，或用 Gradle 离线构建（依赖在 `libs/` 下）
-- 产物放进 `plugins/`，改 `base.yml` 与 `questions.yml`，`/letmeask reload` 即生效
-
-MIT License，仓库见 [LetSeries/LetMeAsk](https://github.com/LetSeries/LetMeAsk)。</script>
-
-  <script type="text/plain" id="humanverify"># HumanVerify：进服先验证
-
-> LetSeries  |  2026/9/19
-
-## 为什么做人机验证
-
-机器人和批量小号是很多服务器的头疼问题。[HumanVerify](https://github.com/LetSeries/HumanVerify) 是面向高版本服务端的游戏内验证插件：玩家进服自动打开验证界面，在背包里点中唯一方块即通过，支持 Paper、Folia、Purpur。
-
-## 验证模式不止一种
-
-插件内置多种模式，可固定一种，也可以每轮随机：
-
-- 唯一颜色方块、唯一材质方块
-- 按编号顺序点击方块
-- 点击指定数量目标方块
-- 找出唯一不同的方块
-- 点击中心或角落方块
-
-背包大小支持 27 / 36 / 45 / 54 格，配合验证超时与错误次数限制，基本能挡住常见的自动脚本。
-
-## Folia 兼容与开放 API
-
-插件使用 Paper/Folia `EntityScheduler`，不依赖传统全局调度器，天然兼容 Folia 区域线程模型。同时通过 Bukkit `ServicesManager` 暴露 `HumanVerifyApi`，其他插件无需依赖实现包即可调用：
-
-- `requestVerification(player)`：幂等发起验证，已验证直接返回成功
-- `requestVerification(player, true)`：强制玩家再次验证
-- `markVerified(player)`：直接放行，供可信插件调用
-
-[LetMeAsk](https://github.com/LetSeries/LetMeAsk) 的防刷机制就是这么接的：答题过快或连对过多时自动触发验证。
-
-## 运行与构建
-
-需要 Java 21+ 与 Paper 1.21.x 服务端（`plugin.yml` 已声明 `folia-supported: true`）：
-
-```bash
-mvn package
-```
-
-产物 `target/HumanVerify-1.0.0.jar` 放进 `plugins/` 目录即可，命令 `/humanverify verify [玩家]`、`/humanverify reload`。</script>
-
-  <script type="text/plain" id="letseries"># LetSeries成立了！
-> kevin-steve772  |  2026/9/19
-
-我们在2026/9/9这一天成立了LetSeries！
-
-感谢CubeX玩家们的支持，我们将在LetSeries组织里创建更多的插件，为CubeX服务器服务，也为服务器的玩家们服务。
-
-我们把某些插件的GitHub仓库fork到了这个组织。包括`LetMeAsk`,`LetMeSee`等标志性插件。
-
-在GitHub上可以查阅：[https://github.com/LetSeries](https://github.com/LetSeries)
-
-我们的口号是：
-
-**LetSeries，让服务器好用一点。**</script>
-  
   <script>
-    const reader = document.getElementById("reader");
-    const content = document.getElementById("markdown-content");
-    const kicker = document.getElementById("reader-kicker");
-    const articles = {
-        // 在这里添加博客项目。
-        // 格式：<博客id>: "<博客id>",
-        humanverify: "humanverify",
-        letmeask: "letmeask",
-        letseries: "letseries"
+    (function () {
+      var reader = document.getElementById("reader");
+      var body = document.getElementById("reader-body");
+      var content = document.getElementById("markdown-content");
+      var kicker = document.getElementById("reader-kicker");
+      var closeBtn = document.getElementById("reader-close");
+      var prevBtn = document.getElementById("nav-prev");
+      var nextBtn = document.getElementById("nav-next");
+      var prevTitle = document.getElementById("nav-prev-title");
+      var nextTitle = document.getElementById("nav-next-title");
+      var searchInput = document.getElementById("search-input");
+      var chipRow = document.getElementById("chip-row");
+      var emptyHint = document.getElementById("empty-hint");
+      var progressBar = document.getElementById("progress-bar");
+      var cache = {};
+      var currentId = null;
+      var activeTag = "";
 
-    };
-
-    function escapeHtml(value) {
-      return value.replace(/[&<>"']/g, character => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[character]));
-    }
-
-    function inlineMarkdown(value) {
-      return escapeHtml(value)
-        .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
-        .replace(/`(.+?)`/g, "<code>$1</code>")
-        .replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g, '<a href="$2" target="_blank" rel="noreferrer">$1</a>');
-    }
-
-    function renderMarkdown(markdown) {
-      const lines = markdown.trim().split("\n");
-      const output = [];
-      let paragraph = [];
-      let listType = null;
-
-      function flushParagraph() { if (paragraph.length) { output.push(`<p>${inlineMarkdown(paragraph.join(" "))}</p>`); paragraph = []; } }
-      function closeList() { if (listType) { output.push(`</${listType}>`); listType = null; } }
-
-      lines.forEach(line => {
-        if (!line.trim()) { flushParagraph(); closeList(); return; }
-        if (line.startsWith("# ")) { flushParagraph(); closeList(); output.push(`<h1>${inlineMarkdown(line.slice(2))}</h1>`); return; }
-        if (line.startsWith("## ")) { flushParagraph(); closeList(); output.push(`<h2>${inlineMarkdown(line.slice(3))}</h2>`); return; }
-        if (line.startsWith("> ")) { flushParagraph(); closeList(); output.push(`<blockquote>${inlineMarkdown(line.slice(2))}</blockquote>`); return; }
-        const unordered = line.match(/^- (.+)$/); const ordered = line.match(/^\d+\. (.+)$/);
-        if (unordered || ordered) { flushParagraph(); const nextType = unordered ? "ul" : "ol"; if (listType !== nextType) { closeList(); output.push(`<${nextType}>`); listType = nextType; } output.push(`<li>${inlineMarkdown((unordered || ordered)[1])}</li>`); return; }
-        closeList(); paragraph.push(line.trim());
+      // 文章元数据全部来自 DOM，无需另维护映射表
+      var posts = Array.prototype.map.call(document.querySelectorAll(".post"), function (el) {
+        return {
+          el: el,
+          id: el.getAttribute("data-id"),
+          src: el.getAttribute("data-src"),
+          title: el.querySelector("h2").textContent,
+          tags: (el.getAttribute("data-tags") || "").split(",").map(function (t) { return t.trim(); }).filter(Boolean)
+        };
       });
-      flushParagraph(); closeList(); return output.join("");
-    }
+      function postById(id) { for (var i = 0; i < posts.length; i++) if (posts[i].id === id) return posts[i]; return null; }
 
-    document.querySelectorAll("[data-article]").forEach(button => button.addEventListener("click", () => {
-      const articleId = articles[button.dataset.article];
-      content.innerHTML = renderMarkdown(document.getElementById(articleId).textContent);
-      kicker.textContent = `LETSeries / ${button.dataset.article.toUpperCase()}`;
-      reader.classList.add("is-open"); reader.scrollIntoView({ behavior: "smooth", block: "start" });
-    }));
-    document.getElementById("reader-close").addEventListener("click", () => { reader.classList.remove("is-open"); });
+      function escapeHtml(value) {
+        return value.replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; });
+      }
+
+      function inlineMarkdown(value) {
+        return escapeHtml(value)
+          .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" loading="lazy">')
+          .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+          .replace(/(^|[^*\w])\*([^*\n]+)\*/g, "$1<em>$2</em>")
+          .replace(/~~(.+?)~~/g, "<del>$1</del>")
+          .replace(/`(.+?)`/g, "<code>$1</code>")
+          .replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noreferrer">$1</a>');
+      }
+
+      function splitCells(row) {
+        var cells = row.trim().replace(/^\||\|$/g, "").split("|");
+        return cells.map(function (c) { return c.trim(); });
+      }
+
+      function renderMarkdown(markdown) {
+        var lines = markdown.replace(/\r\n/g, "\n").split("\n");
+        var out = [];
+        var para = [];
+        var listStack = []; // {type, indent}
+        var quote = [];
+        var code = null; // {lang, buf}
+
+        function flushPara() { if (para.length) { out.push("<p>" + inlineMarkdown(para.join(" ")) + "</p>"); para = []; } }
+        function closeAllLists() { while (listStack.length) { var l = listStack.pop(); out.push("</li></" + l.type + ">"); } }
+        function flushQuote() {
+          if (!quote.length) return;
+          var inner = quote.join("\n").split(/\n\s*\n/).map(function (p) { return "<p>" + inlineMarkdown(p.replace(/\n/g, " ")) + "</p>"; }).join("");
+          out.push("<blockquote>" + inner + "</blockquote>");
+          quote = [];
+        }
+
+        for (var i = 0; i < lines.length; i++) {
+          var line = lines[i];
+
+          // 代码围栏
+          var fence = line.match(/^```(\w*)\s*$/);
+          if (fence) {
+            if (code) {
+              out.push('<div class="code-block"><div class="code-head"><span>' + (code.lang || "code") + '</span><button class="copy-btn" type="button">复制</button></div><pre><code>' + escapeHtml(code.buf.join("\n")) + "</code></pre></div>");
+              code = null;
+            } else {
+              flushPara(); closeAllLists(); flushQuote();
+              code = { lang: fence[1], buf: [] };
+            }
+            continue;
+          }
+          if (code) { code.buf.push(line); continue; }
+
+          if (!line.trim()) { flushPara(); closeAllLists(); flushQuote(); continue; }
+
+          var h = line.match(/^(#{1,3})\s+(.+)$/);
+          if (h) { flushPara(); closeAllLists(); flushQuote(); out.push("<h" + h[1].length + ">" + inlineMarkdown(h[2]) + "</h" + h[1].length + ">"); continue; }
+
+          if (/^(-{3,}|\*{3,}|_{3,})\s*$/.test(line)) { flushPara(); closeAllLists(); flushQuote(); out.push("<hr>"); continue; }
+
+          var q = line.match(/^>\s?(.*)$/);
+          if (q) { flushPara(); closeAllLists(); quote.push(q[1]); continue; }
+          else flushQuote();
+
+          // 表格：表头 + 分隔行
+          if (line.indexOf("|") !== -1 && i + 1 < lines.length && /^\s*\|?[\s:|-]+\|?[\s:|-]*$/.test(lines[i + 1]) && lines[i + 1].indexOf("-") !== -1) {
+            flushPara(); closeAllLists();
+            var head = splitCells(line);
+            var aligns = splitCells(lines[i + 1]).map(function (c) {
+              if (/^:-+:$/.test(c)) return "center"; if (/^-+:$/.test(c)) return "right"; return "left";
+            });
+            var html = "<table><thead><tr>" + head.map(function (c, k) { return '<th style="text-align:' + (aligns[k] || "left") + '">' + inlineMarkdown(c) + "</th>"; }).join("") + "</tr></thead><tbody>";
+            i += 2;
+            while (i < lines.length && lines[i].indexOf("|") !== -1 && lines[i].trim()) {
+              var cells = splitCells(lines[i]);
+              html += "<tr>" + cells.map(function (c, k) { return '<td style="text-align:' + (aligns[k] || "left") + '">' + inlineMarkdown(c) + "</td>"; }).join("") + "</tr>";
+              i++;
+            }
+            i--;
+            out.push(html + "</tbody></table>");
+            continue;
+          }
+
+          var imgOnly = line.match(/^!\[([^\]]*)\]\(([^)]+)\)\s*$/);
+          if (imgOnly) { flushPara(); closeAllLists(); out.push('<figure><img src="' + imgOnly[2] + '" alt="' + escapeHtml(imgOnly[1]) + '" loading="lazy">' + (imgOnly[1] ? "<figcaption>" + escapeHtml(imgOnly[1]) + "</figcaption>" : "") + "</figure>"); continue; }
+
+          var li = line.match(/^(\s*)([-*]|\d+\.)\s+(.*)$/);
+          if (li) {
+            flushPara(); flushQuote();
+            var indent = li[1].replace(/\t/g, "  ").length;
+            var type = /^\d/.test(li[2]) ? "ol" : "ul";
+            var text = li[3];
+            var task = text.match(/^\[([ xX])\]\s+(.*)$/);
+            var itemHtml = task
+              ? '<input type="checkbox" disabled' + (task[1].toLowerCase() === "x" ? " checked" : "") + ">" + inlineMarkdown(task[2])
+              : inlineMarkdown(text);
+            var top = listStack[listStack.length - 1];
+            if (!top || indent > top.indent) {
+              out.push("<" + type + ">");
+              listStack.push({ type: type, indent: indent });
+              out.push("<li>" + itemHtml);
+            } else {
+              // 先关掉更深的嵌套层（含它们未闭合的 <li>）
+              while (listStack.length && listStack[listStack.length - 1].indent > indent) {
+                var deeper = listStack.pop();
+                out.push("</li></" + deeper.type + ">");
+              }
+              var cur = listStack[listStack.length - 1];
+              if (cur && cur.indent === indent && cur.type === type) {
+                out.push("</li><li>" + itemHtml); // 同列表的兄弟项
+              } else {
+                closeAllLists(); // 换列表类型或回到新层级
+                out.push("<" + type + ">");
+                listStack.push({ type: type, indent: indent });
+                out.push("<li>" + itemHtml);
+              }
+            }
+            continue;
+          }
+
+          closeAllLists();
+          para.push(line.trim());
+        }
+        flushPara(); closeAllLists(); flushQuote();
+        return out.join("");
+      }
+
+      function renderNav(id) {
+        var idx = -1;
+        for (var i = 0; i < posts.length; i++) if (posts[i].id === id) idx = i;
+        var prev = idx > 0 ? posts[idx - 1] : null;      // 列表在上 = 更新的 = 上一篇
+        var next = idx >= 0 && idx < posts.length - 1 ? posts[idx + 1] : null;
+        prevBtn.disabled = !prev; nextBtn.disabled = !next;
+        prevTitle.textContent = prev ? prev.title : "没有了";
+        nextTitle.textContent = next ? next.title : "没有了";
+        prevBtn.onclick = prev ? function () { openPost(prev.id, true); } : null;
+        nextBtn.onclick = next ? function () { openPost(next.id, true); } : null;
+      }
+
+      function updateProgress() {
+        if (!reader.classList.contains("is-open")) { progressBar.style.width = "0"; return; }
+        var top = reader.offsetTop;
+        var total = reader.offsetHeight - window.innerHeight + 120;
+        var p = total > 0 ? Math.min(1, Math.max(0, (window.scrollY - top + 120) / total)) : 0;
+        progressBar.style.width = (p * 100).toFixed(1) + "%";
+      }
+
+      function showLoading(id) {
+        currentId = id;
+        var p = postById(id);
+        kicker.textContent = "LETSeries / " + id.toUpperCase();
+        body.innerHTML = '<div class="reader-loading"><span class="spinner"></span>正在加载…</div>';
+        renderNav(id);
+        reader.classList.add("is-open");
+        updateProgress();
+        if (p) document.title = p.title + " · LetSeries";
+      }
+
+      function openPost(id, scroll) {
+        var p = postById(id);
+        if (!p) return;
+        showLoading(id);
+        if (scroll !== false) reader.scrollIntoView({ behavior: "smooth", block: "start" });
+        try { history.replaceState(null, "", "#post=" + id); } catch (e) {}
+        if (cache[id]) {
+          body.innerHTML = "";
+          body.appendChild(cache[id].clone);
+          bindCopy(body);
+          var nav = document.getElementById("reader-nav");
+          if (nav && nav.parentNode !== reader) reader.appendChild(nav);
+          updateProgress();
+          return;
+        }
+        fetch(p.src, { cache: "no-cache" }).then(function (resp) {
+          if (!resp.ok) throw new Error("HTTP " + resp.status);
+          return resp.text();
+        }).then(function (md) {
+          if (currentId !== id) return; // 已切换到别篇
+          var wrap = document.createElement("div");
+          var article = document.createElement("article");
+          article.className = "markdown";
+          article.innerHTML = renderMarkdown(md);
+          wrap.appendChild(article);
+          var nav = document.getElementById("reader-nav");
+          cache[id] = { clone: wrap.cloneNode(true) };
+          body.innerHTML = "";
+          body.appendChild(article);
+          if (nav) reader.appendChild(nav);
+          bindCopy(body);
+          updateProgress();
+        }).catch(function () {
+          if (currentId !== id) return;
+          body.innerHTML = '<div class="reader-error">加载失败，可能是本地 file:// 协议拦住了 fetch。<br>请用 <a href="' + p.src + '">Markdown 源文</a> 直接阅读，或通过 http(s) 访问本站。</div>';
+        });
+      }
+
+      function closeReader() {
+        reader.classList.remove("is-open");
+        currentId = null;
+        progressBar.style.width = "0";
+        document.title = "博客 · LetSeries";
+        try { history.replaceState(null, "", location.pathname); } catch (e) {}
+      }
+
+      function bindCopy(scope) {
+        var btns = scope.querySelectorAll(".copy-btn");
+        Array.prototype.forEach.call(btns, function (btn) {
+          btn.addEventListener("click", function () {
+            var code = btn.closest(".code-block").querySelector("code").textContent;
+            function done(ok) { btn.textContent = ok ? "已复制 ✓" : "复制失败"; setTimeout(function () { btn.textContent = "复制"; }, 1600); }
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+              navigator.clipboard.writeText(code).then(function () { done(true); }, function () { done(false); });
+            } else {
+              var ta = document.createElement("textarea");
+              ta.value = code; document.body.appendChild(ta); ta.select();
+              try { done(document.execCommand("copy")); } catch (e) { done(false); }
+              document.body.removeChild(ta);
+            }
+          });
+        });
+      }
+
+      // 搜索 + 标签筛选
+      var allTags = [];
+      posts.forEach(function (p) { p.tags.forEach(function (t) { if (allTags.indexOf(t) === -1) allTags.push(t); }); });
+      function renderChips() {
+        chipRow.innerHTML = "";
+        var all = document.createElement("button");
+        all.className = "chip-btn" + (activeTag === "" ? " active" : "");
+        all.type = "button"; all.textContent = "全部";
+        all.addEventListener("click", function () { activeTag = ""; renderChips(); applyFilter(); });
+        chipRow.appendChild(all);
+        allTags.forEach(function (t) {
+          var b = document.createElement("button");
+          b.className = "chip-btn" + (activeTag === t ? " active" : "");
+          b.type = "button"; b.textContent = t;
+          b.addEventListener("click", function () { activeTag = activeTag === t ? "" : t; renderChips(); applyFilter(); });
+          chipRow.appendChild(b);
+        });
+      }
+      function applyFilter() {
+        var q = searchInput.value.trim().toLowerCase();
+        var shown = 0;
+        posts.forEach(function (p) {
+          var text = (p.title + " " + p.el.querySelector("p").textContent + " " + p.tags.join(" ")).toLowerCase();
+          var ok = (!q || text.indexOf(q) !== -1) && (!activeTag || p.tags.indexOf(activeTag) !== -1);
+          p.el.hidden = !ok;
+          if (ok) shown++;
+        });
+        emptyHint.classList.toggle("is-show", shown === 0);
+      }
+      searchInput.addEventListener("input", applyFilter);
+      renderChips();
+
+      document.querySelectorAll("[data-open]").forEach(function (btn) {
+        btn.addEventListener("click", function () { openPost(btn.getAttribute("data-open"), true); });
+      });
+      closeBtn.addEventListener("click", closeReader);
+      window.addEventListener("scroll", updateProgress, { passive: true });
+      window.addEventListener("resize", updateProgress);
+
+      // 深链：#post=<id> 直接打开
+      var m = location.hash.match(/#post=([\w-]+)/);
+      if (m && postById(m[1])) openPost(m[1], false);
+    })();
   </script>
 </body>
 </html>

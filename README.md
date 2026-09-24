@@ -12,9 +12,13 @@ LetSeries 的官方网站，使用 GitHub Pages 部署，访问地址：<https:/
 
 ## 写博客
 
-1. 在 `blogs/` 下新增 `<id>.md`；
-2. 在 `blogs/index.html` 的文章列表区加一条 `<article class="post">`（参考文件内注释模板）；
-3. 在同文件的 `<script type="text/plain" id="<id>">` 段粘贴正文，并在 `articles` 对象里注册 `"<id>": "<id>"`。
+1. 在 `blogs/` 下新增 `<id>.md`（UTF-8，`#` 开头写标题）；
+2. 在 `blogs/index.html` 的 `.post-list` 里照模板加一条 `<article class="post">`：
+   改 `data-id`（唯一 id）、`data-src`（md 文件名）、`data-tags`（逗号分隔）、`data-date`、编号、标题、简介即可。
+
+正文只存 `.md` 一份，阅读器打开时 `fetch` 加载渲染，无需再往 HTML 里粘正文。
+渲染器支持：`#`–`###` 标题、代码围栏（含语言名与复制按钮）、表格（含对齐）、任务列表、
+嵌套/有序列表、引用、分割线、图片（独占一行带图注）、删除线、斜体。深链格式：`blogs/#post=<id>`。
 
 ## 本地预览
 
