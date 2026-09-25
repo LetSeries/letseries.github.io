@@ -5,7 +5,7 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 
-REPOS="LetMeDo LetMeSee LetMeAsk Server-AI HumanVerify"
+REPOS="LetMeDo LetMeSee LetMeAsk Server-AI HumanVerify LetMePaytaxes"
 FILE="index.html"
 changed=0
 

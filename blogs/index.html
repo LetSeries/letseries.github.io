@@ -26,8 +26,8 @@
   <link rel="icon" type="image/png" href="../images/LetSeries.png">
   <title>博客 · LetSeries</title>
   <style>
-    :root { color-scheme: light dark; --bg: #f4f7f1; --surface: #fff; --surface-soft: #eaf1e8; --text: #17231c; --muted: #647067; --line: #d7e0d5; --green: #16834b; --green-deep: #0d5833; --green-pale: #cfe9d4; }
-    @media (prefers-color-scheme: dark) { :root { --bg: #111813; --surface: #18241b; --surface-soft: #203126; --text: #edf5eb; --muted: #a6b7a9; --line: #304436; --green: #56ce83; --green-deep: #b1f2c4; --green-pale: #254b32; } }
+    :root { color-scheme: light dark; --bg: #f4f7f1; --surface: #fff; --surface-soft: #eaf1e8; --text: #17231c; --muted: #647067; --line: #d7e0d5; --green: #16834b; --green-deep: #0d5833; --green-pale: #cfe9d4; --on-accent: #fff; }
+    @media (prefers-color-scheme: dark) { :root { --bg: #111813; --surface: #18241b; --surface-soft: #203126; --text: #edf5eb; --muted: #a6b7a9; --line: #304436; --green: #56ce83; --green-deep: #b1f2c4; --green-pale: #254b32; --on-accent: #0b1f14; } }
     * { box-sizing: border-box; } body { margin: 0; color: var(--text); background: var(--bg); font-family: "Noto Sans SC", "Manrope", sans-serif; line-height: 1.7; }
     a { color: inherit; text-decoration: none; } .wrap { width: min(100% - 48px, 980px); margin: 0 auto; } .mono { font-family: "DM Mono", monospace; letter-spacing: .03em; }
     :focus-visible { outline: 2px solid var(--green); outline-offset: 3px; border-radius: 4px; }
@@ -43,7 +43,7 @@
     .chip-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
     .chip-btn { padding: 6px 13px; border: 1px solid var(--line); border-radius: 20px; background: var(--surface); color: var(--muted); cursor: pointer; font: inherit; font-size: 12px; }
     .chip-btn:hover { border-color: var(--green); color: var(--green); }
-    .chip-btn.active { border-color: var(--green); background: var(--green); color: #fff; }
+    .chip-btn.active { border-color: var(--green); background: var(--green); color: var(--on-accent); }
 
     .post-list { display: grid; gap: 14px; margin-top: 34px; } .post { display: grid; grid-template-columns: 120px 1fr auto; gap: 28px; align-items: center; padding: 26px 0; border-top: 1px solid var(--line); } .post:last-child { border-bottom: 1px solid var(--line); }
     .post[hidden] { display: none; }

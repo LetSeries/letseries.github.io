@@ -8,8 +8,8 @@
 	<title>404 · 页面不存在 · LetSeries</title>
 	<link rel="icon" type="image/png" href="images/LetSeries.png">
 	<style>
-		:root { color-scheme: light dark; --bg: #f4f7f1; --text: #17231c; --muted: #647067; --green: #16834b; --line: #d7e0d5; --surface: #fff; }
-		@media (prefers-color-scheme: dark) { :root { --bg: #111813; --text: #edf5eb; --muted: #a6b7a9; --green: #56ce83; --line: #304436; --surface: #18241b; } }
+		:root { color-scheme: light dark; --bg: #f4f7f1; --text: #17231c; --muted: #647067; --green: #16834b; --line: #d7e0d5; --surface: #fff; --on-accent: #fff; }
+		@media (prefers-color-scheme: dark) { :root { --bg: #111813; --text: #edf5eb; --muted: #a6b7a9; --green: #56ce83; --line: #304436; --surface: #18241b; --on-accent: #0b1f14; } }
 		* { box-sizing: border-box; }
 		body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 24px; color: var(--text); background: var(--bg); font-family: "Noto Sans SC", system-ui, sans-serif; }
 		.card { max-width: 520px; padding: 48px; text-align: center; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
@@ -18,7 +18,7 @@
 		p { color: var(--muted); font-size: 14px; }
 		.actions { display: flex; justify-content: center; gap: 12px; margin-top: 28px; flex-wrap: wrap; }
 		a.button { display: inline-flex; padding: 10px 16px; border-radius: 7px; font-size: 14px; font-weight: 700; text-decoration: none; }
-		a.primary { color: #fff; background: var(--green); }
+		a.primary { color: var(--on-accent); background: var(--green); }
 		a.quiet { border: 1px solid var(--line); color: var(--text); }
 	</style>
 </head>

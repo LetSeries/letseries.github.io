@@ -50,6 +50,8 @@
 			--green-deep: #0d5833;
 			--green-pale: #cfe9d4;
 			--yellow: #e7b84a;
+			--on-accent: #ffffff;
+			--team-bg: #0d5833;
 			--shadow: 0 18px 50px rgba(30, 72, 42, .09);
 		}
 
@@ -66,6 +68,8 @@
 				--green-deep: #b1f2c4;
 				--green-pale: #254b32;
 				--yellow: #f1c65a;
+				--on-accent: #0b1f14;
+				--team-bg: #0c3a26;
 				--shadow: 0 18px 50px rgba(0, 0, 0, .2);
 			}
 		}
@@ -82,6 +86,8 @@
 			--green-deep: #b1f2c4;
 			--green-pale: #254b32;
 			--yellow: #f1c65a;
+			--on-accent: #0b1f14;
+			--team-bg: #0c3a26;
 			--shadow: 0 18px 50px rgba(0, 0, 0, .2);
 		}
 
@@ -100,7 +106,7 @@
 		:focus-visible { outline: 2px solid var(--green); outline-offset: 3px; border-radius: 4px; }
 		.wrap { width: min(1160px, calc(100% - 48px)); margin: 0 auto; }
 		.mono { font-family: "DM Mono", monospace; letter-spacing: .03em; }
-		.skip-link { position: absolute; left: -999px; top: 0; padding: 10px 16px; background: var(--green); color: #fff; border-radius: 0 0 8px 0; z-index: 50; }
+		.skip-link { position: absolute; left: -999px; top: 0; padding: 10px 16px; background: var(--green); color: var(--on-accent); border-radius: 0 0 8px 0; z-index: 50; }
 		.skip-link:focus { left: 0; }
 
 		header {
@@ -141,7 +147,7 @@
 		.hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
 		.button { display: inline-flex; align-items: center; gap: 9px; padding: 12px 17px; border-radius: 7px; font-size: 14px; font-weight: 700; transition: transform .2s ease, box-shadow .2s ease; }
 		.button:hover { transform: translateY(-2px); }
-		.button-primary { color: #fff; background: var(--green); box-shadow: 0 10px 22px color-mix(in srgb, var(--green) 24%, transparent); }
+		.button-primary { color: var(--on-accent); background: var(--green); box-shadow: 0 10px 22px color-mix(in srgb, var(--green) 24%, transparent); }
 		.button-quiet { border: 1px solid var(--line); background: var(--surface); }
 		.hero-art { position: relative; min-height: 380px; display: grid; place-items: center; }
 		.orbit { width: min(340px, 72vw); aspect-ratio: 1; border: 1px solid var(--line); border-radius: 50%; position: relative; }
@@ -188,9 +194,9 @@
 		.principle p { margin: 0; color: var(--muted); font-size: 13px; }
 
 		.team-band { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: stretch; }
-		.team-panel { padding: 31px; border-radius: 9px; background: var(--green-deep); color: #fff; }
+		.team-panel { padding: 31px; border-radius: 9px; background: var(--team-bg); color: #fff; }
 		.team-panel h2 { color: #fff; }
-		.team-panel p { max-width: 410px; color: color-mix(in srgb, #fff 75%, var(--green-deep)); }
+		.team-panel p { max-width: 410px; color: color-mix(in srgb, #fff 78%, var(--team-bg)); }
 		.team-panel a { display: inline-flex; margin-top: 18px; color: #fff; border-bottom: 1px solid var(--yellow); font-size: 13px; }
 		.people { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
 		.person { display: flex; flex-direction: column; justify-content: end; padding: 18px; min-height: 190px; border: 1px solid var(--line); border-radius: 9px; background: var(--surface); }
@@ -287,11 +293,12 @@
 		<section id="projects"><div class="wrap">
 			<div class="section-head"><div><div class="kicker mono">01 / PROJECTS</div><h2>正在构建的工具</h2></div><p class="section-note">从服务器运维到玩家体验，覆盖 Bukkit、Spigot、Paper、Folia、Purpur 与代理端。</p></div>
 			<div class="project-grid">
-				<article class="project"><div class="project-icon">→_</div><h3>LetMeDo</h3><p>多功能服务器插件。模块化设计，一个 jar 兼容 1.8.8+ 到最新版本，支持 Bukkit 与 Velocity / Bungee 代理端；现已内置 warps 传送点与模块开关。</p><div class="project-tags"><span class="tag">JAVA 21</span><span class="tag">GRADLE</span><span class="tag">MIT</span><span class="tag tag-push">更新 2026-09-23</span></div><div class="project-foot"><span class="mono">main · e111604</span><span class="project-links"><a href="https://github.com/LetSeries/LetMeDo" target="_blank" rel="noreferrer">仓库 ↗</a><a href="https://github.com/LetSeries/LetMeDo#readme" target="_blank" rel="noreferrer">文档</a></span></div></article>
-				<article class="project"><div class="project-icon">□</div><h3>LetMeSee</h3><p>轻量只读容器查看工具，支持 Folia 与 Paper，让管理操作更直接。</p><div class="project-tags"><span class="tag">JAVA 21</span><span class="tag">PAPER · FOLIA</span><span class="tag tag-push">更新 2026-08-01</span></div><div class="project-foot"><span class="mono">main · 64874cb</span><span class="project-links"><a href="https://github.com/LetSeries/LetMeSee" target="_blank" rel="noreferrer">仓库 ↗</a><a href="https://github.com/LetSeries/LetMeSee#readme" target="_blank" rel="noreferrer">文档</a></span></div></article>
-				<article class="project"><div class="project-icon">?</div><h3>LetMeAsk</h3><p>服务器抢答活动插件。定时出题、经济奖励、人机验证与持久化统计，组成完整活动体验。</p><div class="project-tags"><span class="tag">JAVA 17</span><span class="tag">PAPER 1.20.4+</span><span class="tag">MIT</span><span class="tag tag-push">更新 2026-09-23</span></div><div class="project-foot"><span class="mono">main · 2c27db1</span><span class="project-links"><a href="https://github.com/LetSeries/LetMeAsk" target="_blank" rel="noreferrer">仓库 ↗</a><a href="https://github.com/LetSeries/LetMeAsk#readme" target="_blank" rel="noreferrer">文档</a></span></div></article>
+				<article class="project"><div class="project-icon">→_</div><h3>LetMeDo</h3><p>多功能服务器插件。模块化设计，一个 jar 兼容 1.8.8+ 到最新版本；现已内置 warps 传送点、玩家交易与模块开关。</p><div class="project-tags"><span class="tag">JAVA 21</span><span class="tag">GRADLE</span><span class="tag">MIT</span><span class="tag tag-push">更新 2026-09-24</span></div><div class="project-foot"><span class="mono">main · 47f9c82</span><span class="project-links"><a href="https://github.com/LetSeries/LetMeDo" target="_blank" rel="noreferrer">仓库 ↗</a><a href="https://github.com/LetSeries/LetMeDo#readme" target="_blank" rel="noreferrer">文档</a></span></div></article>
+				<article class="project"><div class="project-icon">□</div><h3>LetMeSee</h3><p>轻量只读容器查看工具，支持 Folia 与 Paper，让管理操作更直接。</p><div class="project-tags"><span class="tag">JAVA 21</span><span class="tag">PAPER · FOLIA</span><span class="tag tag-push">更新 2026-09-24</span></div><div class="project-foot"><span class="mono">main · c37a7ff</span><span class="project-links"><a href="https://github.com/LetSeries/LetMeSee" target="_blank" rel="noreferrer">仓库 ↗</a><a href="https://github.com/LetSeries/LetMeSee#readme" target="_blank" rel="noreferrer">文档</a></span></div></article>
+				<article class="project"><div class="project-icon">?</div><h3>LetMeAsk</h3><p>服务器抢答活动插件。定时出题、经济奖励、人机验证与持久化统计，组成完整活动体验。</p><div class="project-tags"><span class="tag">JAVA 17</span><span class="tag">PAPER 1.20.4+</span><span class="tag">MIT</span><span class="tag tag-push">更新 2026-09-24</span></div><div class="project-foot"><span class="mono">main · 0e9b5f1</span><span class="project-links"><a href="https://github.com/LetSeries/LetMeAsk" target="_blank" rel="noreferrer">仓库 ↗</a><a href="https://github.com/LetSeries/LetMeAsk#readme" target="_blank" rel="noreferrer">文档</a></span></div></article>
 				<article class="project"><div class="project-icon">AI</div><h3>Server-AI</h3><p>把 AI 带进 Minecraft。兼容 OpenAI 格式 API，并可通过自然语言控制 NPC。</p><div class="project-tags"><span class="tag">JAVA 21</span><span class="tag">PAPER · FOLIA</span><span class="tag">MIT</span><span class="tag tag-push">更新 2026-07-17</span></div><div class="project-foot"><span class="mono">main · 9682619</span><span class="project-links"><a href="https://github.com/LetSeries/Server-AI" target="_blank" rel="noreferrer">仓库 ↗</a><a href="https://github.com/LetSeries/Server-AI#readme" target="_blank" rel="noreferrer">文档</a></span></div></article>
-				<article class="project"><div class="project-icon">✓</div><h3>HumanVerify</h3><p>游戏内人机验证插件，提供多种验证模式，并通过 API 服务其他插件。</p><div class="project-tags"><span class="tag">JAVA 21</span><span class="tag">PAPER · FOLIA · PURPUR</span><span class="tag tag-push">更新 2026-08-30</span></div><div class="project-foot"><span class="mono">main · 843c29f</span><span class="project-links"><a href="https://github.com/LetSeries/HumanVerify" target="_blank" rel="noreferrer">仓库 ↗</a><a href="https://github.com/LetSeries/HumanVerify#readme" target="_blank" rel="noreferrer">文档</a></span></div></article>
+				<article class="project"><div class="project-icon">✓</div><h3>HumanVerify</h3><p>游戏内人机验证插件，提供多种验证模式，并通过 API 服务其他插件。</p><div class="project-tags"><span class="tag">JAVA 21</span><span class="tag">PAPER · FOLIA · PURPUR</span><span class="tag tag-push">更新 2026-09-25</span></div><div class="project-foot"><span class="mono">main · 4d7de8b</span><span class="project-links"><a href="https://github.com/LetSeries/HumanVerify" target="_blank" rel="noreferrer">仓库 ↗</a><a href="https://github.com/LetSeries/HumanVerify#readme" target="_blank" rel="noreferrer">文档</a></span></div></article>
+				<article class="project"><div class="project-icon">￥</div><h3>LetMePaytaxes</h3><p>服务器税务系统，解决服务器银行没钱的问题。早期开发中，敬请期待。</p><div class="project-tags"><span class="tag">MIT</span><span class="tag tag-push">更新 2026-09-25</span></div><div class="project-foot"><span class="mono">main · 756f179</span><span class="project-links"><a href="https://github.com/LetSeries/LetMePaytaxes" target="_blank" rel="noreferrer">仓库 ↗</a><a href="https://github.com/LetSeries/LetMePaytaxes#readme" target="_blank" rel="noreferrer">文档</a></span></div></article>
 				<article class="project"><div class="project-icon">✎</div><h3>博客</h3><p>记录构建过程：兼容性、线程模型与开源协作中的具体答案。</p><div class="project-tags"><span class="tag">JOURNAL</span></div><div class="project-foot"><span class="mono">letseries.github.io</span><span class="project-links"><a href="blogs/index.html">阅读博客 →</a></span></div></article>
 			</div>
 		</div></section>
@@ -306,6 +313,7 @@
 					<tr><td><a href="https://github.com/LetSeries/LetMeAsk" target="_blank" rel="noreferrer">LetMeAsk</a></td><td>Paper / Spigot 1.20.4+</td><td>17</td><td>Vault（推荐）、HumanVerify（可选）</td><td><code>mvn clean package</code></td></tr>
 					<tr><td><a href="https://github.com/LetSeries/Server-AI" target="_blank" rel="noreferrer">Server-AI</a></td><td>Paper / Folia 1.21.4+</td><td>21</td><td>OpenAI 兼容 API（或本地 Ollama）</td><td><code>mvn clean verify</code></td></tr>
 					<tr><td><a href="https://github.com/LetSeries/HumanVerify" target="_blank" rel="noreferrer">HumanVerify</a></td><td>Paper / Folia / Purpur 1.21.x</td><td>21</td><td>无</td><td><code>mvn package</code></td></tr>
+					<tr><td><a href="https://github.com/LetSeries/LetMePaytaxes" target="_blank" rel="noreferrer">LetMePaytaxes</a></td><td colspan="3">早期开发中，环境与依赖待定</td><td>—</td></tr>
 				</tbody>
 			</table></div>
 		</div></section>
