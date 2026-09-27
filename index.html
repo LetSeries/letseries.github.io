@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="zh-CN">
 <head>
+	<script>try{var t=localStorage.getItem("ls-theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="description" content="LetSeries 是 CubeXMC 研究院旗下的 Minecraft 服务端开发组织，提供 LetMeDo、LetMeSee、LetMeAsk、Server-AI、HumanVerify 等实用开源插件与工具。">
@@ -158,7 +159,7 @@
 		.orbit-label { position: absolute; padding: 6px 9px; border: 1px solid var(--line); border-radius: 5px; background: var(--surface); color: var(--muted); font-size: 11px; box-shadow: var(--shadow); }
 		.label-a { top: 5%; left: 5%; } .label-b { right: -2%; top: 42%; } .label-c { bottom: 9%; left: 10%; }
 
-		section { padding: 105px 0; border-top: 1px solid var(--line); }
+		section { padding: 105px 0; border-top: 1px solid var(--line); scroll-margin-top: 76px; }
 		.section-head { display: flex; align-items: end; justify-content: space-between; gap: 25px; margin-bottom: 38px; }
 		.kicker { color: var(--green); font-size: 12px; font-weight: 700; text-transform: uppercase; }
 		h2 { margin: 8px 0 0; font-size: clamp(30px, 4vw, 48px); line-height: 1.15; letter-spacing: -.06em; }
@@ -253,8 +254,10 @@
 			@keyframes rise { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 		}
 		@media print {
-			header, .hero-art, .hero-actions, .to-top, .nav-tools, footer .footer-links { display: none; }
+			header, .hero-art, .hero-actions, .hero-meta, .to-top, .nav-tools, footer .footer-links, #contact { display: none; }
 			section { padding: 30px 0; } .project-grid { grid-template-columns: 1fr; }
+			.project, .contact-card, .person { break-inside: avoid; }
+			body { background: #fff; }
 		}
 	</style>
 </head>
@@ -323,7 +326,7 @@
 			<div class="principle-list"><div class="principle"><div class="principle-number">01</div><div><h3>兼容优先</h3><p>面向真实的多版本、多服务端环境设计，尽可能优雅降级。</p></div></div><div class="principle"><div class="principle-number">02</div><div><h3>轻量可靠</h3><p>尊重服务器资源与区域线程，不让工具成为新的性能问题。</p></div></div><div class="principle"><div class="principle-number">03</div><div><h3>开放协作</h3><p>以开源项目连接开发者与服主，让反馈真正回到产品里。</p></div></div></div>
 		</div></section>
 
-		<section id="team"><div class="wrap team-band"><div class="team-panel"><div class="kicker mono">04 / THE TEAM</div><h2>一起把事情<br>做得更好。</h2><p>LetSeries 由一群关注 Minecraft 服务端体验的开发者共同维护，隶属于 CubeXMC 研究院。</p><a href="https://cubexmc.org/" target="_blank" rel="noreferrer">了解 CubeXMC 研究院 ↗</a></div><div class="people"><div class="person"><div class="person-avatar"><img src="images/FZAoao.png" alt="FZAoao"></div><strong>FZAoao</strong><small>Core contributor</small><span class="person-link"><a href="https://github.com/FZAoao" target="_blank" rel="noreferrer">GitHub →</a></span></div><div class="person"><div class="person-avatar"><img src="images/kevin-steve772.png" alt="kevin-steve772"></div><strong>kevin-steve772</strong><small>Core contributor</small><span class="person-link"><a href="https://github.com/kevin-steve772" target="_blank" rel="noreferrer">GitHub →</a></span></div><div class="person"><div class="person-avatar"><img src="images/angushushu.png" alt="angushushu"></div><strong>angushushu</strong><small>Contributor</small><span class="person-link"><a href="https://github.com/angushushu" target="_blank" rel="noreferrer">GitHub →</a></span></div></div></div></section>
+		<section id="team"><div class="wrap team-band"><div class="team-panel"><div class="kicker mono">04 / THE TEAM</div><h2>一起把事情<br>做得更好。</h2><p>LetSeries 由一群关注 Minecraft 服务端体验的开发者共同维护，隶属于 CubeXMC 研究院。</p><a href="https://cubexmc.org/" target="_blank" rel="noreferrer">了解 CubeXMC 研究院 ↗</a></div><div class="people"><div class="person"><div class="person-avatar"><img src="images/FZAoao.png" alt="FZAoao" width="54" height="54" loading="lazy" decoding="async"></div><strong>FZAoao</strong><small>Core contributor</small><span class="person-link"><a href="https://github.com/FZAoao" target="_blank" rel="noreferrer">GitHub →</a></span></div><div class="person"><div class="person-avatar"><img src="images/kevin-steve772.png" alt="kevin-steve772" width="54" height="54" loading="lazy" decoding="async"></div><strong>kevin-steve772</strong><small>Core contributor</small><span class="person-link"><a href="https://github.com/kevin-steve772" target="_blank" rel="noreferrer">GitHub →</a></span></div><div class="person"><div class="person-avatar"><img src="images/angushushu.png" alt="angushushu" width="54" height="54" loading="lazy" decoding="async"></div><strong>angushushu</strong><small>Contributor</small><span class="person-link"><a href="https://github.com/angushushu" target="_blank" rel="noreferrer">GitHub →</a></span></div></div></div></section>
 
 		<section id="contact"><div class="wrap">
 			<div class="section-head"><div><div class="kicker mono">05 / CONTACT</div><h2>找到我们</h2></div><p class="section-note">问题反馈请走对应仓库的 Issues；合作与加入请通过组织主页联系。</p></div>
@@ -340,12 +343,8 @@
 		(function () {
 			var root = document.documentElement;
 
-			// 主题：跟随系统，允许手动覆盖并记住选择
+			// 主题：跟随系统，允许手动覆盖并记住选择（初始值已由 head 内联脚本应用，避免闪烁）
 			var toggle = document.getElementById("theme-toggle");
-			try {
-				var saved = localStorage.getItem("ls-theme");
-				if (saved === "light" || saved === "dark") root.setAttribute("data-theme", saved);
-			} catch (e) {}
 			function syncToggle() {
 				var dark = root.getAttribute("data-theme") === "dark" ||
 					(!root.getAttribute("data-theme") && window.matchMedia("(prefers-color-scheme: dark)").matches);
